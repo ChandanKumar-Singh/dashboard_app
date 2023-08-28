@@ -1,37 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:my_dashboard/controllers/auth_provider.dart';
-import 'package:my_dashboard/database/model/response/base/sl_container.dart';
-import 'package:my_dashboard/screens/dashboard/profile_screen.dart';
+import '/controllers/auth_provider.dart';
+import '/database/model/response/base/sl_container.dart';
+import '/screens/dashboard/profile_screen.dart';
+import '/utils/logger.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../controllers/MenuProvider.dart';
 import '../../responsive.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../dashboard/settings_screen.dart';
 import 'components/side_menu.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
+  const MainScreen({super.key, this.tab});
+  final String? tab;
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   final authProvider = sl.get<AuthProvider>();
+  final menuProvider = sl.get<MenuProvider>();
+  @override
+  void initState() {
+    super.initState();
+    menuProvider.setSideMenu('Dashboard');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (widget.tab != null) {
+        infoLog('_MainScreenState ${widget.tab}', 'tab');
+        String menu = 'Dashboard';
+        switch (widget.tab!.toLowerCase()) {
+          case 'settings':
+            menuProvider.setSideMenu('Settings');
+        }
+        await Future.delayed(
+            const Duration(seconds: 5), () => menuProvider.setSideMenu(menu));
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: context.read<MenuProvider>().scaffoldKey,
-      drawer: SideMenu(),
+      drawer: const SideMenu(),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // We want this side menu only for large screen
             if (Responsive.isDesktop(context))
-              Expanded(
+              const Expanded(
                 // default flex = 1
                 // and it takes 1/6 part of the screen
                 child: SideMenu(),
@@ -44,23 +64,23 @@ class _MainScreenState extends State<MainScreen> {
                   return Builder(builder: (context) {
                     switch (menuProvider.sideMenu) {
                       case 'Dashboard':
-                        return DashboardScreen();
+                        return const SettingsScreen();
                       case 'Transaction':
-                        return DashboardScreen();
+                        return const DashboardScreen();
                       case 'Task':
-                        return DashboardScreen();
+                        return const DashboardScreen();
                       case 'Documents':
-                        return DashboardScreen();
+                        return const DashboardScreen();
                       case 'Store':
-                        return DashboardScreen();
+                        return const DashboardScreen();
                       case 'Notification':
-                        return DashboardScreen();
+                        return const DashboardScreen();
                       case 'Profile':
-                        return ProfileScreen();
+                        return const ProfileScreen();
                       case 'Settings':
-                        return DashboardScreen();
+                        return const SettingsScreen();
                       default:
-                        return DashboardScreen();
+                        return const DashboardScreen();
                     }
                   });
                 },

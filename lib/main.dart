@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initRepos();
-  runApp(StreamAuthScope(child:  MyApp()));
+  runApp(StreamAuthScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,12 +22,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveTheme(
       light: ThemeData.light().copyWith(
-          useMaterial3: true,
-          scaffoldBackgroundColor: creamColor,
-          textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
-              .apply(bodyColor: Colors.black),
-          canvasColor: snowColor,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink)),
+        useMaterial3: true,
+        scaffoldBackgroundColor: creamColor,
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+            .apply(bodyColor: Colors.black),
+        canvasColor: snowColor,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        inputDecorationTheme: buildInputDecorationTheme(Brightness.light),
+      ),
       dark: ThemeData.dark().copyWith(
         useMaterial3: true,
 
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
+        inputDecorationTheme: buildInputDecorationTheme(Brightness.dark),
+
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple)
         //     .copyWith(brightness: Brightness.dark),
       ),
@@ -74,4 +78,41 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+InputDecorationTheme buildInputDecorationTheme(Brightness brightness) {
+  Color labelColor =
+      brightness == Brightness.dark ? Colors.white54 : Colors.black54;
+  Color hintColor =
+      brightness == Brightness.dark ? Colors.white54 : Colors.black54;
+  Color focusedBorderColor =
+      brightness == Brightness.dark ? Colors.white54 : Colors.black54;
+  Color fillColor = brightness != Brightness.dark
+      ? Colors.grey[100]!
+      : Colors.white.withOpacity(0.03);
+  BorderRadius borderRadius = const BorderRadius.all(Radius.circular(10.0));
+  InputBorder focus({Color? color}) => OutlineInputBorder(
+      borderSide: BorderSide(color: color ?? focusedBorderColor),
+      borderRadius: borderRadius);
+  InputBorder enable({Color? color}) => OutlineInputBorder(
+      borderSide: BorderSide(color: color ?? focusedBorderColor),
+      borderRadius: borderRadius);
+  InputBorder error({Color? color}) => OutlineInputBorder(
+      borderSide: BorderSide(color: color ?? focusedBorderColor),
+      borderRadius: borderRadius);
+  InputBorder disable({Color? color}) => OutlineInputBorder(
+      borderSide: BorderSide(color: color ?? focusedBorderColor),
+      borderRadius: borderRadius);
+  return InputDecorationTheme(
+      isDense: true,
+      contentPadding:
+          const EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
+      filled: true,
+      fillColor: fillColor,
+      labelStyle: TextStyle(color: labelColor),
+      hintStyle: TextStyle(color: hintColor),
+      focusedBorder: focus(),
+      enabledBorder: enable(),
+      errorBorder: error(color: Colors.red),
+      disabledBorder: disable(color: Colors.grey));
 }

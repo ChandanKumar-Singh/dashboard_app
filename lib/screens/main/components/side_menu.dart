@@ -9,12 +9,14 @@ import 'package:my_dashboard/database/model/response/base/sl_container.dart';
 import 'package:my_dashboard/route_management/route_path.dart';
 import 'package:my_dashboard/screens/auth/login_screen.dart';
 import 'package:my_dashboard/utils/picture_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/text.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controllers/MenuProvider.dart';
 
 class SideMenu extends StatelessWidget {
-  SideMenu({
+  const SideMenu({
     Key? key,
   }) : super(key: key);
   @override
@@ -30,94 +32,111 @@ class SideMenu extends StatelessWidget {
                   Theme.of(context).brightness.name == Brightness.dark.name
                       ? bgColor
                       : null,
-              child: ListView(
+              child: Column(
                 children: [
                   DrawerHeader(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
                       children: [
-                        // assetImages(
-                        //   PNGAssets.appLogo,
-                        //   width: 100
-                        // ),
+                        buildCachedNetworkImage(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaVLpYjzbcJkOfAsLdoC4HVA--cVGhgijlUCaHRyt0ACkYn0qMs6rgc2nrv9vYGfCE22k&usqp=CAU',
+                            shape: BoxShape.circle),
                         const SizedBox(height: 10),
                         Text('authProvider.user.fullname' ?? '',
                             style: Theme.of(context).textTheme.titleSmall)
                       ],
                     ),
                   ),
-                  DrawerListTile(
-                    title: "Dashboard",
-                    svgSrc: "assets/icons/menu_dashbord.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Dashboard');
-                      menuProvider.controlMenu(context);
-                    },
+                  Expanded(
+                    child: ListView(
+                      children: [
+
+                        DrawerListTile(
+                          title: "Dashboard",
+                          svgSrc: "assets/icons/menu_dashbord.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Dashboard');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Transaction",
+                          svgSrc: "assets/icons/menu_tran.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Transaction');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Orders",
+                          svgSrc: "assets/icons/menu_task.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Task');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Products",
+                          svgSrc: "assets/icons/menu_doc.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Documents');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Store",
+                          svgSrc: "assets/icons/menu_store.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Store');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Locations",
+                          svgSrc: "assets/icons/menu_notification.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Notification');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Profile",
+                          svgSrc: "assets/icons/menu_profile.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Profile');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Settings",
+                          svgSrc: "assets/icons/menu_setting.svg",
+                          press: () {
+                            menuProvider.setSideMenu('Settings');
+                            menuProvider.controlMenu(context);
+                          },
+                        ),
+                        DrawerListTile(
+                          title: "Logout",
+                          svgSrc: "assets/icons/menu_setting.svg",
+                          press: () {
+                            _authProvider.clearUser();
+                            context.go(RoutePath.login);
+                          },
+                        ),
+                        height10(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            capText('@Copyright 2023', context),
+                          ],
+                        ),
+                        height10(),
+                      ],
+                    ),
                   ),
-                  DrawerListTile(
-                    title: "Transaction",
-                    svgSrc: "assets/icons/menu_tran.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Transaction');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Task",
-                    svgSrc: "assets/icons/menu_task.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Task');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Documents",
-                    svgSrc: "assets/icons/menu_doc.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Documents');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Store",
-                    svgSrc: "assets/icons/menu_store.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Store');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Notification",
-                    svgSrc: "assets/icons/menu_notification.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Notification');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Profile",
-                    svgSrc: "assets/icons/menu_profile.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Profile');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Settings",
-                    svgSrc: "assets/icons/menu_setting.svg",
-                    press: () {
-                      menuProvider.setSideMenu('Settings');
-                      menuProvider.controlMenu(context);
-                    },
-                  ),
-                  DrawerListTile(
-                    title: "Logout",
-                    svgSrc: "assets/icons/menu_setting.svg",
-                    press: () {
-                      _authProvider.clearUser();
-                      context.go(RoutePath.login);
-                    },
-                  ),
+
                 ],
               ),
             );

@@ -178,6 +178,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import '../controllers/MenuProvider.dart';
+import '../database/model/response/base/sl_container.dart';
 import '/screens/auth/splash-screen.dart';
 import '/screens/main/main_screen.dart';
 import '../screens/page_not_found.dart';
@@ -198,7 +200,21 @@ class MyRouter {
       GoRoute(
           name: RouteName.home,
           path: RoutePath.home,
-          builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+          builder: (BuildContext context, GoRouterState state) {
+            // final menuProvider = sl.get<MenuProvider>();
+            // String menu = 'Dashboard';
+            //
+            // String? tab = state.queryParameters['t'];
+            // if (tab != null) {
+            //   infoLog('_MainScreenState $tab', 'tab');
+            //   switch (tab.toLowerCase()) {
+            //     case 'settings':
+            //       menuProvider.setSideMenu('Settings');
+            //   }
+            // }
+            // menuProvider.setSideMenu(menu);
+            return MainScreen(tab: state.queryParameters['t']);
+          },
           routes: [
             // _newRoute2(
             //     RouteName.search,
@@ -209,15 +225,14 @@ class MyRouter {
           ]),
 
       ///authentication
-      _newRoute2(
-          RouteName.login, (GoRouterState state) =>  LoginScreen(), null,
+      _newRoute2(RouteName.login, (GoRouterState state) => LoginScreen(), null,
           subPath: false),
-      _newRoute2(RouteName.splash,
-          (GoRouterState state) => const SplashScreen(), null,
+      _newRoute2(
+          RouteName.splash, (GoRouterState state) => const SplashScreen(), null,
           subPath: false),
     ],
     errorPageBuilder: (context, state) =>
-        animatedRoute(state, NotFoundScreen(state: state, uri: state.uri.toString())),
+        animatedRoute(state, NotFoundScreen(state: state, uri: state.location)),
     redirect: _redirect,
   );
 }
@@ -232,6 +247,9 @@ FutureOr<String?> _redirect(BuildContext context, GoRouterState state) async {
 
   ///check for on-boarding
 
+  infoLog('state is ${state.queryParameters}');
+  infoLog('state is ${state.extra}');
+  infoLog('state is ${state.toString()}');
   infoLog('path is $path  , user is logged in $loggedIn');
   if (path == RoutePath.splash) {
     return RoutePath.splash;

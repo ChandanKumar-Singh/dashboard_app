@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget height5([double? height]) => SizedBox(height: height ?? 5);
 Widget height10([double? height]) => SizedBox(height: height ?? 10);
@@ -15,3 +17,17 @@ Widget width30([double? width]) => SizedBox(width: width ?? 30);
 Widget width40([double? width]) => SizedBox(width: width ?? 40);
 Widget width50([double? width]) => SizedBox(width: width ?? 50);
 Widget width100([double? width]) => SizedBox(width: width ?? 100);
+
+
+
+
+Size getSize(BuildContext context) => MediaQuery.of(context).size;
+double get getWidth => MediaQuery.of(Get.context!).size.width;
+ThemeData get getTheme => Theme.of(Get.context!);
+
+Widget space(double p) =>
+    SizedBox(height: MediaQuery.of(Get.context!).size.height * p / 100);
+double perSize(double p) => MediaQuery.of(Get.context!).size.height * p / 100;
+
+double paddingDefault = 12;
+double spaceDefault = 20;

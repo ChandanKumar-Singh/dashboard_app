@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_dashboard/controllers/auth_provider.dart';
-import 'package:my_dashboard/database/model/response/base/sl_container.dart';
-import 'package:my_dashboard/screens/dashboard/components/default_caontainer.dart';
-import 'package:my_dashboard/screens/dashboard/components/edit_profile.dart';
-import 'package:my_dashboard/utils/dialogs.dart';
-import 'package:my_dashboard/utils/sizedbox_utils.dart';
-import 'package:my_dashboard/utils/text.dart';
+import '/controllers/auth_provider.dart';
+import '/database/model/response/base/sl_container.dart';
+import '/screens/dashboard/components/default_caontainer.dart';
+import '/screens/dashboard/components/edit_profile.dart';
+import '/utils/dialogs.dart';
+import '/utils/sizedbox_utils.dart';
+import '/utils/text.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(0),
             child: Column(
               children: [
-                const ProfileHeader(),
+                const CommonHeader(secondaryWidget: ProfileHeader()),
                 const SizedBox(height: defaultPadding),
                 Expanded(
                   child: SmartRefresher(

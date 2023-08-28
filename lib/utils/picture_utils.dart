@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '/constants.dart';
 import '/constants/app_constants.dart';
@@ -54,36 +55,45 @@ ImageProvider netImageProvider(String path,
 CachedNetworkImage buildCachedNetworkImage(String image,
     {double? ph,
     double? pw,
+    double? borderRadius,
     BoxFit? fit,
-    String? placeholder,
-    BoxShape? shape}) {
-  logD(image, 'buildCachedNetworkImage');
+    bool fullPath = false,
+    BoxShape? shape,
+    String? placeholder}) {
   return CachedNetworkImage(
     imageUrl: image,
     fit: fit ?? BoxFit.cover,
-    imageBuilder: (context, provider) => Container(
-      decoration: BoxDecoration(
-          shape: shape ?? BoxShape.rectangle,
-          image: DecorationImage(image: provider, fit: fit ?? BoxFit.cover)),
+    imageBuilder: (context, image) => ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius ?? 0),
+      child: Container(
+        width: pw ?? 50,
+        height: ph ?? 50,
+        decoration: BoxDecoration(
+            shape: shape ?? BoxShape.rectangle,
+            image: DecorationImage(image: image, fit: fit ?? BoxFit.cover)),
+      ),
     ),
     placeholder: (context, url) => Center(
       child: SizedBox(
-          height: ph ?? 50,
-          width: pw ?? 100,
-          child: Center(
-              child: CircularProgressIndicator(
-                  color: secondaryColor.withOpacity(0.5)))),
-    ),
-    errorWidget: (context, url, error) => Center(
-      child: SizedBox(
         height: ph ?? 50,
         width: pw ?? 100,
-        child: assetImages(placeholder ?? PNGAssets.appLogo),
+        child: Center(
+            child: CircularProgressIndicator(
+                color: Theme.of(Get.context!)
+                    .colorScheme
+                    .primary
+                    .withOpacity(0.5))),
       ),
     ),
-    cacheManager: CacheManager(
-      Config("${AppConst.appName}_$image",
-          stalePeriod: const Duration(days: 30)),
+    errorWidget: (context, url, error) => ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius ?? 0),
+      child: Center(
+          child: SizedBox(
+              height: ph ?? 50,
+              width: pw ?? 100,
+              child: assetImages(placeholder ?? PNGAssets.appLogo))),
     ),
+    cacheManager: CacheManager(Config("${AppConst.appName}_$image",
+        stalePeriod: const Duration(days: 30))),
   );
 }

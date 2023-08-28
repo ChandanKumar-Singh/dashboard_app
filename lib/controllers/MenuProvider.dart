@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_dashboard/utils/logger.dart';
 
 import '../responsive.dart';
 
@@ -16,9 +17,10 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
-  String sideMenu = 'Dashboard';
+  String sideMenu = 'Settings';
   setSideMenu(String? val) {
-    sideMenu = val ?? 'Dashboard';
+    sideMenu = val ?? 'Settings';
+    warningLog('setting menu... : $sideMenu', 'setSideMenu');
     notifyListeners();
   }
 

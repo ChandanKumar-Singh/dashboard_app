@@ -77,19 +77,14 @@ class ProfileCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: 
+                child:
                 // authProvider.user.profileImage != null
-                '' != null
+                '1' != 1
                     ? SizedBox(
                   height: 30,
-                      child: buildCachedNetworkImage(
-                              // authProvider.user.profileImage!,
-                          // "assets/images/profile_pic.png",
-                          "https://lh3.googleusercontent.com/ogw/AGvuzYbCjPndhT6p2KUO5jrI6sNchmrBZDidDi_6wa13xg=s32-c-mo",
-                          // "https://assets.mspimages.in/wp-content/uploads/2021/06/Windows-11-Banner-MySmartPrice.jpg",
-                          ph: isMobile ? 30 : 38,
-                        ),
-                    )
+                      child:   buildCachedNetworkImage(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaVLpYjzbcJkOfAsLdoC4HVA--cVGhgijlUCaHRyt0ACkYn0qMs6rgc2nrv9vYGfCE22k&usqp=CAU',
+                          shape: BoxShape.circle),)
                     : Image.asset("assets/images/profile_pic.png",
                         height: isMobile ? 30 : 38),
               ),
