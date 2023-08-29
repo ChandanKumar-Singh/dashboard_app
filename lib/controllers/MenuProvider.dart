@@ -17,9 +17,9 @@ class MenuProvider extends ChangeNotifier {
     }
   }
 
-  String sideMenu = 'Settings';
+  String sideMenu = 'Dashboard';
   setSideMenu(String? val) {
-    sideMenu = val ?? 'Settings';
+    sideMenu = val ?? 'Dashboard';
     warningLog('setting menu... : $sideMenu', 'setSideMenu');
     notifyListeners();
   }

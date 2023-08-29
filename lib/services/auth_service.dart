@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:my_dashboard/controllers/auth_provider.dart';
 import '/database/model/response/additional/user_model.dart';
 
 import '../database/model/response/base/sl_container.dart';
@@ -56,8 +57,10 @@ class StreamAuth {
   /// async operation.
   Future<bool> isSignedIn() async {
     // await Future<void>.delayed(const Duration(seconds: 1));
-    var authRepo = sl.get<AuthRepo>();
-    _currentUser = await authRepo.getUser();
+    var authProvider = sl.get<AuthProvider>();
+    _currentUser = await authProvider.getUser();
+    if (currentUser != null) await authProvider.updateUser(currentUser!);
+
     return _currentUser != null;
   }
 
@@ -79,9 +82,9 @@ class StreamAuth {
   /// Signs in a user with an artificial delay to mimic async operation.
   Future<void> signIn(UserModel userData,
       {bool onBoarding = false, int bottomIndex = 0}) async {
-    var authRepo = sl.get<AuthRepo>();
-    await authRepo.saveUser(userData);
-    UserModel? user = await authRepo.getUser();
+    var authProvider = sl.get<AuthProvider>();
+    await authProvider.updateUser(userData);
+    UserModel? user = await authProvider.getUser();
     if (user != null) {
       //   MyDialogs.showCircleLoader();
       // }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
@@ -24,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    menuProvider.setSideMenu('Dashboard');
+/*    menuProvider.setSideMenu('Dashboard');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (widget.tab != null) {
         infoLog('_MainScreenState ${widget.tab}', 'tab');
@@ -36,59 +38,84 @@ class _MainScreenState extends State<MainScreen> {
         await Future.delayed(
             const Duration(seconds: 5), () => menuProvider.setSideMenu(menu));
       }
-    });
-
+    });*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: context.read<MenuProvider>().scaffoldKey,
-      drawer: const SideMenu(),
-      body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // We want this side menu only for large screen
-            if (Responsive.isDesktop(context))
-              const Expanded(
-                // default flex = 1
-                // and it takes 1/6 part of the screen
-                child: SideMenu(),
-              ),
-            Expanded(
-              // It takes 5/6 part of the screen
-              flex: 5,
-              child: Consumer<MenuProvider>(
-                builder: (context, menuProvider, child) {
-                  return Builder(builder: (context) {
-                    switch (menuProvider.sideMenu) {
-                      case 'Dashboard':
-                        return const SettingsScreen();
-                      case 'Transaction':
-                        return const DashboardScreen();
-                      case 'Task':
-                        return const DashboardScreen();
-                      case 'Documents':
-                        return const DashboardScreen();
-                      case 'Store':
-                        return const DashboardScreen();
-                      case 'Notification':
-                        return const DashboardScreen();
-                      case 'Profile':
-                        return const ProfileScreen();
-                      case 'Settings':
-                        return const SettingsScreen();
-                      default:
-                        return const DashboardScreen();
-                    }
-                  });
-                },
+    return Consumer<MenuProvider>(
+      builder: (context, menuProvider, child) {
+        return WillPopScope(
+          onWillPop: () async => onWillPOP(menuProvider),
+          child: Scaffold(
+            key: context.read<MenuProvider>().scaffoldKey,
+            drawer: const SideMenu(),
+            body: SafeArea(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // We want this side menu only for large screen
+                  if (Responsive.isDesktop(context))
+                    const Expanded(
+                      // default flex = 1
+                      // and it takes 1/6 part of the screen
+                      child: SideMenu(),
+                    ),
+                  Expanded(
+                    // It takes 5/6 part of the screen
+                    flex: 5,
+                    child: Builder(
+                      builder: (context) {
+                        Widget child = getScreen(menuProvider);
+                        infoLog(child.toString());
+                        return child;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  Future<bool> onWillPOP(MenuProvider menuProvider) async {
+    bool willBack = false;
+    warningLog('OnWillPOP side menu is ${menuProvider.sideMenu}');
+    if (Platform.isAndroid || Platform.isIOS) {
+      if (menuProvider.sideMenu != 'Dashboard') {
+        menuProvider.setSideMenu('Dashboard');
+        setState(() {});
+        willBack = false;
+      } else {
+        willBack = false;
+      }
+    }
+    return willBack;
+  }
+
+  Widget getScreen(MenuProvider menuProvider) {
+    switch (menuProvider.sideMenu) {
+      case 'Dashboard':
+        return const DashboardScreen();
+      case 'Transaction':
+        return const DashboardScreen();
+      case 'Task':
+        return const DashboardScreen();
+      case 'Documents':
+        return const DashboardScreen();
+      case 'Store':
+        return const DashboardScreen();
+      case 'Notification':
+        return const DashboardScreen();
+      case 'Profile':
+        return const ProfileScreen();
+      case 'Web and App Settings':
+        return const SettingsScreen();
+      default:
+        return const DashboardScreen();
+    }
   }
 }

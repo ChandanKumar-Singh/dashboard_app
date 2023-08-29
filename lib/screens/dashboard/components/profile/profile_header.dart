@@ -26,20 +26,23 @@ class _CommonHeaderState extends State<CommonHeader> {
           padding: EdgeInsets.symmetric(
               vertical: Responsive.isMobile(context) ? 0 : defaultPadding / 2),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (!Responsive.isDesktop(context))
                 IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () =>
                         context.read<MenuProvider>().controlMenu(context)),
-              if (!Responsive.isMobile(context))
+              if (!Responsive.isTablet(context))
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: defaultPadding),
+                    if (!Responsive.isMobile(context))
+                      const SizedBox(width: defaultPadding),
                     Text(
                       provider.sideMenu,
                       style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.start,
                     ),
                   ],
                 ),

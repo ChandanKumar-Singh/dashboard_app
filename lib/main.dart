@@ -29,10 +29,13 @@ class MyApp extends StatelessWidget {
         canvasColor: snowColor,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
         inputDecorationTheme: buildInputDecorationTheme(Brightness.light),
+        listTileTheme: ListTileTheme.of(context).copyWith(dense: true),
+        visualDensity: VisualDensity.compact,
       ),
       dark: ThemeData.dark().copyWith(
         useMaterial3: true,
-
+        visualDensity: VisualDensity.compact,
+        listTileTheme: ListTileTheme.of(context).copyWith(dense: true),
         scaffoldBackgroundColor: bgColor,
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
             .apply(bodyColor: Colors.white),

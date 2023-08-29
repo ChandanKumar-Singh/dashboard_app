@@ -66,35 +66,43 @@ class ProfileCard extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.only(
               left: defaultPadding, right: defaultPadding / 2),
-          padding: const EdgeInsets.symmetric(
-              horizontal: defaultPadding, vertical: defaultPadding / 2),
+          padding: EdgeInsets.symmetric(
+              horizontal: Responsive.isMobile(context) ? 0 : defaultPadding / 2,
+              vertical: defaultPadding / 2),
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border.all(color: Colors.white10),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child:
-                // authProvider.user.profileImage != null
-                '1' != 1
-                    ? SizedBox(
-                  height: 30,
-                      child:   buildCachedNetworkImage(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaVLpYjzbcJkOfAsLdoC4HVA--cVGhgijlUCaHRyt0ACkYn0qMs6rgc2nrv9vYGfCE22k&usqp=CAU',
-                          shape: BoxShape.circle),)
-                    : Image.asset("assets/images/profile_pic.png",
-                        height: isMobile ? 30 : 38),
+                    // authProvider.user.profileImage != null
+                    '1' != 1
+                        ? SizedBox(
+                            height: 30,
+                            child: buildCachedNetworkImage(
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaVLpYjzbcJkOfAsLdoC4HVA--cVGhgijlUCaHRyt0ACkYn0qMs6rgc2nrv9vYGfCE22k&usqp=CAU',
+                                shape: BoxShape.circle),
+                          )
+                        : Image.asset("assets/images/profile_pic.png",
+                            height: isMobile ? 30 : 38),
               ),
               if (!Responsive.isMobile(context))
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: defaultPadding / 2),
-                  child: Text('authProvider.user.fullname' ?? ""),
+                  child: Text(authProvider.currentUser.fullname ?? ""),
                 ),
-              const Icon(Icons.keyboard_arrow_down),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: !Responsive.isMobile(context) ? 0 : defaultPadding / 2,
+                ),
+                child: const Icon(Icons.keyboard_arrow_down),
+              ),
             ],
           ),
         );

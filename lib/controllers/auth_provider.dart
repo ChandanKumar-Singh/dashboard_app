@@ -106,13 +106,12 @@ class AuthProvider extends ChangeNotifier {
       }
     } catch (e) {}*/
     await saveLoginToken('token');
-    var user=UserModel(
+    var user = UserModel(
         id: 2345678,
         email: 'thetdsdev@gmail.com',
         fullname: 'Chandan Kumar Singh');
-   await StreamAuthScope.of(context).signIn(user);
+    await StreamAuthScope.of(context).signIn(user);
     await updateUser(user);
-
     sendingLoginOTP = false;
     notifyListeners();
     var token = await authRepo.getLoginToken();
@@ -197,6 +196,10 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     await authRepo.saveUser(newUser);
     logD('user update in prefs successfully! ${user.toJson()}', tag);
+  }
+
+  Future<UserModel?> getUser() async {
+    return await authRepo.getUser();
   }
 
   Future<void> saveLoginToken(String token) async =>
