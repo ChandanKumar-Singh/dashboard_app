@@ -70,13 +70,18 @@ class SideMenu extends StatelessWidget {
             // print(provider.currentUser.toJson());
             final authProvider = sl.get<AuthProvider>();
             return Drawer(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0)),
               backgroundColor:
                   Theme.of(context).brightness.name == Brightness.dark.name
                       ? bgColor
-                      : null,
+                      : creamColor,
+              elevation: 0,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DrawerHeader(
+                  Container(
+                    padding: EdgeInsets.all(paddingDefault),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +196,8 @@ class SideMenu extends StatelessWidget {
                                 menuProvider.setSideMenu(re_store_orders);
                                 menuProvider.controlMenu(context);
                               },
-                              selected: menuProvider.sideMenu == re_store_orders,
+                              selected:
+                                  menuProvider.sideMenu == re_store_orders,
                             ),
                             DrawerListTile(
                               title: all_orders,
@@ -236,7 +242,8 @@ class SideMenu extends StatelessWidget {
                                 menuProvider.setSideMenu(out_f_del_orders);
                                 menuProvider.controlMenu(context);
                               },
-                              selected: menuProvider.sideMenu == out_f_del_orders,
+                              selected:
+                                  menuProvider.sideMenu == out_f_del_orders,
                             ),
                             DrawerListTile(
                               title: pay_fail_orders,
@@ -245,7 +252,8 @@ class SideMenu extends StatelessWidget {
                                 menuProvider.setSideMenu(pay_fail_orders);
                                 menuProvider.controlMenu(context);
                               },
-                              selected: menuProvider.sideMenu == pay_fail_orders,
+                              selected:
+                                  menuProvider.sideMenu == pay_fail_orders,
                             ),
                             DrawerListTile(
                               title: com_orders,
@@ -263,8 +271,10 @@ class SideMenu extends StatelessWidget {
                                 menuProvider.setSideMenu(day_wise_orders);
                                 menuProvider.controlMenu(context);
                               },
-                              selected: menuProvider.sideMenu == day_wise_orders,
-                            ),  DrawerListTile(
+                              selected:
+                                  menuProvider.sideMenu == day_wise_orders,
+                            ),
+                            DrawerListTile(
                               title: miss_orders,
                               svgSrc: "assets/icons/menu_task.svg",
                               press: () {
@@ -508,7 +518,13 @@ class _DrawerListTileState extends State<DrawerListTile> {
     );
     var title = Text(
       widget.title,
-      // style: Theme.of(context).textTheme.bodyText1,
+      maxLines: 2,
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          // fontWeight: FontWeight.w600,
+          height: 1,
+          color: getTheme.brightness == Brightness.dark
+              ? Colors.white70
+              : Colors.black),
     );
     var trailing = widget.children!.isEmpty ? const SizedBox.shrink() : null;
     return ClipRRect(

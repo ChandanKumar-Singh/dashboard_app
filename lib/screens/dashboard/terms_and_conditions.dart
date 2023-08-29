@@ -4,8 +4,6 @@ import '../../widgets/rich_text_editor.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
 import '/screens/dashboard/components/default_caontainer.dart';
-import '/screens/dashboard/components/edit_profile.dart';
-import '/utils/dialogs.dart';
 import '/utils/sizedbox_utils.dart';
 import '/utils/text.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +14,14 @@ import '../../responsive.dart';
 
 import 'components/profile/profile_header.dart';
 
-class AboutUsPage extends StatefulWidget {
-  const AboutUsPage({super.key});
+class TermsAndConditionsPage extends StatefulWidget {
+  const TermsAndConditionsPage({super.key});
 
   @override
-  State<AboutUsPage> createState() => _AboutUsPageState();
+  State<TermsAndConditionsPage> createState() => _TermsAndConditionsPageState();
 }
 
-class _AboutUsPageState extends State<AboutUsPage> {
+class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final authProvider = sl.get<AuthProvider>();
@@ -65,7 +63,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bodyLargeText('Edit About Us Content:', context),
+            bodyLargeText('Edit Terms and Conditions Content:', context),
             height10(),
             Expanded(
                 child: ClipRRect(

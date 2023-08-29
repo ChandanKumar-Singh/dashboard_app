@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loadmore/loadmore.dart';
 
-import '../constants/asset_constants.dart';
+import '../constants/assets_constant.dart';
 import '../utils/picture_utils.dart';
 import 'bouncing_rotating_widget.dart';
 

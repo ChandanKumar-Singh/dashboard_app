@@ -1,6 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_dashboard/screens/dashboard/terms_and_conditions.dart';
+import '../../widgets/rich_text_editor.dart';
+import '../dashboard/about_us_page.dart';
+import '../dashboard/list_notifications.dart';
+import '../dashboard/sendNotificationPage.dart';
+import '../dashboard/store_approval_screen.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
 import '/screens/dashboard/profile_screen.dart';
@@ -56,11 +62,18 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   // We want this side menu only for large screen
                   if (Responsive.isDesktop(context))
-                    const Expanded(
-                      // default flex = 1
-                      // and it takes 1/6 part of the screen
-                      child: SideMenu(),
+                    Container(
+                      constraints:
+                          const BoxConstraints(maxWidth: 300), // and it takes 1/6 part of the screen
+                      child: const SideMenu(),
                     ),
+                  if (Responsive.isDesktop(context))
+                    const SizedBox(
+                        height: double.maxFinite,
+                        width: 1,
+                        child: VerticalDivider(
+                          thickness: 0.3,
+                        )),
                   Expanded(
                     // It takes 5/6 part of the screen
                     flex: 5,
@@ -99,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget getScreen(MenuProvider menuProvider) {
     switch (menuProvider.sideMenu) {
       case 'Dashboard':
-        return const DashboardScreen();
+        return const StoreApprovalScreen();
       case 'Transaction':
         return const DashboardScreen();
       case 'Task':
@@ -108,12 +121,20 @@ class _MainScreenState extends State<MainScreen> {
         return const DashboardScreen();
       case 'Store':
         return const DashboardScreen();
-      case 'Notification':
-        return const DashboardScreen();
+      case 'Store Approval':
+        return const StoreApprovalScreen();
+      case 'Send Notifications':
+        return const SendNotificationPage();
+      case 'List Notifications':
+        return const NotificationsListScreen();
       case 'Profile':
         return const ProfileScreen();
       case 'Web and App Settings':
         return const SettingsScreen();
+      case 'About Us':
+        return const AboutUsPage();
+      case 'Terms And Conditions':
+        return const TermsAndConditionsPage();
       default:
         return const DashboardScreen();
     }

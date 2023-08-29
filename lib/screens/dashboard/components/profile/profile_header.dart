@@ -33,7 +33,7 @@ class _CommonHeaderState extends State<CommonHeader> {
                     icon: const Icon(Icons.menu),
                     onPressed: () =>
                         context.read<MenuProvider>().controlMenu(context)),
-              if (!Responsive.isTablet(context))
+              // if (!Responsive.isTablet(context))
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

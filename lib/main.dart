@@ -27,10 +27,21 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
             .apply(bodyColor: Colors.black),
         canvasColor: snowColor,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        colorScheme: ColorScheme.fromSeed(seedColor:  Color.fromARGB(255, 119, 0, 255)),
         inputDecorationTheme: buildInputDecorationTheme(Brightness.light),
         listTileTheme: ListTileTheme.of(context).copyWith(dense: true),
         visualDensity: VisualDensity.compact,
+        // cardColor: Colors.white,
+        cardTheme: CardTheme(
+          elevation: 0.2,
+          color: Color(0xffEAEEF5),
+          // shadowColor: Colors.black54
+        ),
+        drawerTheme: DrawerThemeData(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.transparent,
+          elevation: 0.5
+        )
       ),
       dark: ThemeData.dark().copyWith(
         useMaterial3: true,
@@ -112,8 +123,8 @@ InputDecorationTheme buildInputDecorationTheme(Brightness brightness) {
           const EdgeInsetsDirectional.symmetric(horizontal: 10, vertical: 10),
       filled: true,
       fillColor: fillColor,
-      labelStyle: TextStyle(color: labelColor),
-      hintStyle: TextStyle(color: hintColor),
+      labelStyle: TextStyle(color: labelColor,fontSize: 13),
+      hintStyle: TextStyle(color: hintColor,fontSize: 13),
       focusedBorder: focus(),
       enabledBorder: enable(),
       errorBorder: error(color: Colors.red),

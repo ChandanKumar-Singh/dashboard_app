@@ -55,6 +55,10 @@ dependencies:
   go_router: ^9.0.3
   get: ^4.6.5
   lottie: ^2.6.0
+  html_editor_enhanced: ^2.5.1
+  flutter_typeahead: ^4.6.2
+  image_picker: ^1.0.2
+  loadmore: ^2.1.0
 
 dev_dependencies:
   flutter_test:
