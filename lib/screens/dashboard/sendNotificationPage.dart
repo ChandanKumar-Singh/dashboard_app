@@ -98,12 +98,12 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
             children: [
               Row(
                 children: [
-                  bodyLargeText('Send Notification to ', context),
+                  bodyLargeText('Send Notification to '),
                   PopupMenuButton(
                       itemBuilder: (context) => <PopupMenuItem>[
                             ...['Customers', 'Stores', 'Delivery Boy']
                                 .map((e) => PopupMenuItem(
-                                    value: e, child: bodyMedText(e, context)))
+                                    value: e, child: bodyMedText(e)))
                                 .toList()
                           ],
                       onSelected: (val) => setState(() {
@@ -114,7 +114,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          bodyLargeText(userType ?? 'Select User', context,
+                          bodyLargeText(userType ?? 'Select User',
                               color: getTheme.colorScheme.primary),
                           Icon(Icons.arrow_drop_down_rounded,
                               color: getTheme.colorScheme.primary)
@@ -123,7 +123,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                 ],
               ),
               height10(),
-              bodyMedText('Select ${userType ?? 'User Type'}', context,
+              bodyMedText('Select ${userType ?? 'User Type'}',
                   color: Colors.grey),
               height5(),
               Column(
@@ -134,7 +134,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                     children: [
                       ...usersList.map(
                         (e) => Chip(
-                          label: capText(e, context),
+                          label: capText(e),
                           onDeleted: () => setState(() => usersList.remove(e)),
                           deleteIcon: const Icon(Icons.clear, size: 15),
                         ),
@@ -193,14 +193,14 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                 },
               ),
               height10(),
-              bodyMedText('Title', context, color: Colors.grey),
+              bodyMedText('Title', color: Colors.grey),
               height5(),
               TextFormField(
                 decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.edit), hintText: 'Enter title'),
               ),
               height10(),
-              bodyMedText('Message', context, color: Colors.grey),
+              bodyMedText('Message', color: Colors.grey),
               height5(),
               TextFormField(
                 maxLines: 5,
@@ -210,7 +210,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                     const InputDecoration(hintText: 'Enter message here'),
               ),
               height10(),
-              bodyMedText('Notification Image', context, color: Colors.grey),
+              bodyMedText('Notification Image', color: Colors.grey),
               height5(),
               TextFormField(
                 readOnly: true,
@@ -270,7 +270,7 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         primaryFocus?.unfocus();
                         _formKey.currentState?.validate();
                       },
-                      child: bodyLargeText('Confirm & Send', context,
+                      child: bodyLargeText('Confirm & Send',
                           color: Colors.white)),
                 ],
               ),
@@ -324,7 +324,6 @@ class _UpdateAppAssets extends StatelessWidget {
         children: [
           bodyLargeText(
             "App Banner",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -363,7 +362,7 @@ class _UpdateAppAssets extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           bodyLargeText(
             "App Logo",
-            context,
+
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -405,7 +404,7 @@ class _UpdateAppAssets extends StatelessWidget {
             children: [
               FilledButton(
                   onPressed: () {},
-                  child: capText('Update', context, color: Colors.white)),
+                  child: capText('Update', color: Colors.white)),
             ],
           )
         ],

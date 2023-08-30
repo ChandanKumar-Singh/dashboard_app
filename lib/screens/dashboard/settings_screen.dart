@@ -106,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bodyLargeText('Services', context),
+            bodyLargeText('Services'),
             height10(),
             Wrap(
               runSpacing: 10,
@@ -116,7 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 300,
                   child: SwitchListTile(
                     value: true,
-                    title: bodyLargeText('App Enabled', context),
+                    title: bodyLargeText('App Enabled'),
                     onChanged: (val) {},
                   ),
                 ),
@@ -124,7 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 300,
                   child: SwitchListTile(
                     value: true,
-                    title: bodyLargeText('App Enabled', context),
+                    title: bodyLargeText('App Enabled'),
                     onChanged: (val) {},
                   ),
                 ),
@@ -132,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   width: 300,
                   child: SwitchListTile(
                     value: true,
-                    title: bodyLargeText('App Enabled', context),
+                    title: bodyLargeText('App Enabled'),
                     onChanged: (val) {},
                   ),
                 ),
@@ -149,7 +149,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       primaryFocus?.unfocus();
                     },
-                    child: bodyLargeText('Save', context, color: Colors.white)),
+                    child: bodyLargeText('Save', color: Colors.white)),
               ],
             ),
           ],
@@ -162,7 +162,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bodyLargeText('App Setup', context),
+            bodyLargeText('App Setup'),
             height10(),
             Wrap(
               runSpacing: 10,
@@ -205,7 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       primaryFocus?.unfocus();
                     },
-                    child: bodyLargeText('Save', context, color: Colors.white)),
+                    child: bodyLargeText('Save', color: Colors.white)),
               ],
             ),
           ],
@@ -218,7 +218,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bodyLargeText('FCM Server Setup', context),
+            bodyLargeText('FCM Server Setup'),
             height10(),
             TextFormField(
               decoration: const InputDecoration(
@@ -247,7 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () {
                       primaryFocus?.unfocus();
                     },
-                    child: bodyLargeText('Save', context, color: Colors.white)),
+                    child: bodyLargeText('Save', color: Colors.white)),
               ],
             ),
           ],
@@ -273,7 +273,6 @@ class _UpdateAppAssets extends StatelessWidget {
         children: [
           bodyLargeText(
             "App Banner",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -312,7 +311,6 @@ class _UpdateAppAssets extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           bodyLargeText(
             "App Logo",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -354,7 +352,7 @@ class _UpdateAppAssets extends StatelessWidget {
             children: [
               FilledButton(
                   onPressed: () {},
-                  child: capText('Update', context, color: Colors.white)),
+                  child: capText('Update', color: Colors.white)),
             ],
           )
         ],

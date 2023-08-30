@@ -65,7 +65,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            bodyLargeText('Edit About Us Content:', context),
+            bodyLargeText('Edit About Us Content:'),
             height10(),
             Expanded(
                 child: ClipRRect(
@@ -82,7 +82,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                     onPressed: () {
                       primaryFocus?.unfocus();
                     },
-                    child: bodyLargeText('Save', context, color: Colors.white)),
+                    child: bodyLargeText('Save', color: Colors.white)),
               ],
             ),
           ],
@@ -108,7 +108,6 @@ class _UpdateAppAssets extends StatelessWidget {
         children: [
           bodyLargeText(
             "App Banner",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -147,7 +146,6 @@ class _UpdateAppAssets extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           bodyLargeText(
             "App Logo",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -189,7 +187,7 @@ class _UpdateAppAssets extends StatelessWidget {
             children: [
               FilledButton(
                   onPressed: () {},
-                  child: capText('Update', context, color: Colors.white)),
+                  child: capText('Update', color: Colors.white)),
             ],
           )
         ],

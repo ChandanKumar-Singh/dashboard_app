@@ -29,13 +29,12 @@ class NotFoundScreen extends StatelessWidget {
             height5(kToolbarHeight),
             Expanded(child: assetLottie(LottieAssets.pageNotFound)),
             height20(),
-            titleLargeText('Page not found', context, color: Colors.red),
+            titleLargeText('Page not found',  color: Colors.red),
             height5(),
             Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 16.0),
               child: bodyLargeText(
                   'Sorry, the data you are looking for not matched in our record',
-                  context,
                   textAlign: TextAlign.center),
             ),
             height20(),

@@ -69,7 +69,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
                           height50(),
                           assetLottie('no_notifications.json'),
                           height20(),
-                          bodyLargeText('There is not any notification yet.', context),
+                          bodyLargeText('There is not any notification yet.'),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -107,7 +107,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
       },
       child: Chip(
         side: BorderSide(color: color ?? Colors.grey),
-        label: bodyMedText(s, context),
+        label: bodyMedText(s),
         avatar: Icon(icon, color: color),
       ),
     );

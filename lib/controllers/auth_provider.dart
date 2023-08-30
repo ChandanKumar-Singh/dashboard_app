@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:my_dashboard/database/dio/exception/api_error_handler.dart';
-import 'package:my_dashboard/database/model/response/additional/user_model.dart';
-import 'package:my_dashboard/services/auth_service.dart';
-import 'package:my_dashboard/utils/logger.dart';
-import 'package:my_dashboard/utils/toasts.dart';
+import '/database/dio/exception/api_error_handler.dart';
+import '/database/model/response/additional/user_model.dart';
+import '/services/auth_service.dart';
+import '/utils/logger.dart';
 
 import '../database/model/response/base/api_response.dart';
 import '../database/repositories/auth_repo.dart';

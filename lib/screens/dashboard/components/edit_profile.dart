@@ -23,7 +23,6 @@ class EditProfile extends StatelessWidget {
         children: [
           bodyLargeText(
             "Update Profile",
-            context,
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,
@@ -62,10 +61,10 @@ class EditProfile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               OutlinedButton(
-                  onPressed: () {}, child: capText('Cancel', context)),
+                  onPressed: () {}, child: capText('Cancel')),
               FilledButton(
                   onPressed: () {},
-                  child: capText('Update', context, color: Colors.white)),
+                  child: capText('Update', color: Colors.white)),
             ],
           )
         ],

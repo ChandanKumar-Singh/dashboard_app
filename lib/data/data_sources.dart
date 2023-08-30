@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:my_dashboard/utils/logger.dart';
+import 'package:my_dashboard/utils/picture_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/text.dart';
 
 class RestorableDessertSelections extends RestorableProperty<Set<int>> {
   Set<int> _dessertSelections = {};
@@ -55,19 +59,19 @@ class ApprovalStore {
     this.email,
     this.adminShare,
     this.ownerName,
-    this.iron,
-  );
+  ) {
+    profilePic = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+  }
 
   final int id = _idCounter++;
 
-  final String profilePic;
-  final int storeName;
-  final double city;
-  final int mobile;
-  final double email;
-  final int adminShare;
-  final int ownerName;
-  final int iron;
+  String profilePic;
+  final String storeName;
+  final String city;
+  final String mobile; // 10 digit mobile number with country code
+  final String email;
+  final double adminShare;
+  final String ownerName;
   bool selected = false;
 }
 
@@ -75,6 +79,7 @@ class ApprovalStore {
 /// which is part of DataTable and PaginatedDataTable synchronous data fecthin API.
 /// This class uses static collection of deserts as a data store, projects it into
 /// DataRows, keeps track of selected items, provides sprting capability
+/*
 class DessertDataSource extends DataTableSource {
   DessertDataSource.empty(this.context) {
     desserts = [];
@@ -204,23 +209,25 @@ class DessertDataSource extends DataTableSource {
     notifyListeners();
   }
 }
+*/
 
 /// Async datasource for AsynPaginatedDataTabke2 example. Based on AsyncDataTableSource which
 /// is an extension to FLutter's DataTableSource and aimed at solving
 /// saync data fetching scenarious by paginated table (such as using Web API)
 class StoreListApprovalSourceAsync extends AsyncDataTableSource {
+  final String tag = 'StoreListApprovalSourceAsync';
   StoreListApprovalSourceAsync() {
-    print('DessertDataSourceAsync created');
+    infoLog('DessertDataSourceAsync created', tag);
   }
 
   StoreListApprovalSourceAsync.empty() {
     _empty = true;
-    print('DessertDataSourceAsync.empty created');
+    infoLog('DessertDataSourceAsync.empty created', tag);
   }
 
   StoreListApprovalSourceAsync.error() {
     _errorCounter = 0;
-    print('DessertDataSourceAsync.error created');
+    infoLog('DessertDataSourceAsync.error created', tag);
   }
 
   bool _empty = false;
@@ -252,13 +259,13 @@ class StoreListApprovalSourceAsync extends AsyncDataTableSource {
 
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
-    print('getRows($startIndex, $count)');
+    warningLog('getRows($startIndex, $count)', tag);
     if (_errorCounter != null) {
       _errorCounter = _errorCounter! + 1;
 
       if (_errorCounter! % 2 == 1) {
         await Future.delayed(const Duration(milliseconds: 1000));
-        throw 'Error #${((_errorCounter! - 1) / 2).round() + 1} has occured';
+        throw 'Error #${((_errorCounter! - 1) / 2).round() + 1} has occurred';
       }
     }
 
@@ -267,15 +274,15 @@ class StoreListApprovalSourceAsync extends AsyncDataTableSource {
     assert(startIndex >= 0);
 
     // List returned will be empty is there're fewer items than startingAt
-    var x = _empty
+    var newData = _empty
         ? await Future.delayed(const Duration(milliseconds: 2000),
             () => StoreListApprovalServiceResponse(0, []))
         : await _repo.getData(
             startIndex, count, _caloriesFilter, _sortColumn, _sortAscending);
 
-    var r = AsyncRowsResponse(
-        x.totalRecords,
-        x.data.map((store) {
+    var response = AsyncRowsResponse(
+        newData.totalRecords,
+        newData.data.map((store) {
           return DataRow(
             key: ValueKey<int>(store.id),
             selected: store.selected,
@@ -286,19 +293,34 @@ class StoreListApprovalSourceAsync extends AsyncDataTableSource {
             },
             cells: [
               DataCell(Text(store.id.toString())),
-              DataCell(Text(store.profilePic)),
-              DataCell(Text('${store.storeName}')),
-              DataCell(Text(store.city.toStringAsFixed(1))),
-              DataCell(Text('${store.mobile}')),
-              DataCell(Text(store.email.toStringAsFixed(1))),
-              DataCell(Text('${store.adminShare}')),
-              DataCell(Text(format.format(store.ownerName / 100))),
+              DataCell(
+                  buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35)),
+              DataCell(Text(store.storeName)),
+              DataCell(Text(store.city)),
+              DataCell(Text(store.mobile)),
+              DataCell(Row(
+                children: [
+                  Expanded(
+                      child: capText(store.email,
+                          maxLines: 1, overflow: TextOverflow.ellipsis)),
+                  width5(),
+                  GestureDetector(
+                    onTap: () {
+                      errorLog('email is ${store.email}');
+                    },
+                    child: Icon(Icons.copy,
+                        color: getTheme.colorScheme.primary, size: 10),
+                  )
+                ],
+              )),
+              DataCell(Text('${store.adminShare.toStringAsFixed(1)}%')),
+              DataCell(Text(store.ownerName)),
               // DataCell(Text(format.format(store.iron / 100))),
             ],
           );
         }).toList());
 
-    return r;
+    return response;
   }
 }
 
@@ -315,34 +337,35 @@ class StoreListApprovalServiceResponse {
 class StoreListApprovalService {
   int Function(ApprovalStore, ApprovalStore)? _getComparisonFunction(
       String column, bool ascending) {
+    infoLog('Column name is $column', '_getComparisonFunction');
     var coef = ascending ? 1 : -1;
     switch (column) {
       case '#':
-        return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.id.toString().compareTo(d2.id.toString()));
+        infoLog('Column name is $column', '_getComparisonFunction', '#');
+        return (ApprovalStore d1, ApprovalStore d2) => coef * (d1.id - d2.id);
       case 'profile pic':
-        return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.profilePic.compareTo(d2.profilePic));
-      // case 'profile pic':
-      //  return (ApprovalStore d1, ApprovalStore d2) => coef * (d1.storeName - d2.storeName);
+        infoLog(
+            'Column name is $column', '_getComparisonFunction', 'profile pic');
+      // return (ApprovalStore d1, ApprovalStore d2) =>
+      //     coef * (d1.profilePic.compareTo(d2.profilePic));
       case 'store name':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.storeName - d2.storeName);
+            coef * (d1.storeName.compareTo(d2.storeName));
       case 'city':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.city - d2.city).round();
+            coef * (d1.city.compareTo(d2.city));
       case 'mobile':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.mobile - d2.mobile).round();
+            coef * (d1.mobile.compareTo(d2.mobile));
       case 'email':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.email - d2.email).round();
+            coef * (d1.email.compareTo(d2.email));
       case 'admin share':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.adminShare - d2.adminShare);
+            coef * (d1.adminShare - d2.adminShare).round();
       case 'owner name':
         return (ApprovalStore d1, ApprovalStore d2) =>
-            coef * (d1.ownerName - d2.ownerName);
+            coef * (d1.ownerName.compareTo(d2.ownerName));
     }
 
     return null;
@@ -353,11 +376,12 @@ class StoreListApprovalService {
     return Future.delayed(
         Duration(
             milliseconds: startingAt == 0
-                ? 2650
+                ? 1000
                 : startingAt < 20
-                    ? 2000
-                    : 400), () {
+                    ? 500
+                    : 200), () {
       var result = _dessertsX3;
+/*
       if (caloriesFilter != null) {
         result = result
             .where((e) =>
@@ -365,13 +389,13 @@ class StoreListApprovalService {
                 e.storeName <= caloriesFilter.end)
             .toList();
       }
+*/
 
       try {
         result.sort(_getComparisonFunction(sortedBy, sortedAsc));
       } catch (e) {
         print(e);
       }
-      print(result);
 
       return StoreListApprovalServiceResponse(
           result.length, result.skip(startingAt).take(count).toList());
@@ -381,6 +405,7 @@ class StoreListApprovalService {
 
 int _selectedCount = 0;
 
+/*
 List<ApprovalStore> stores = <ApprovalStore>[
   ApprovalStore(
     'Frozen Yogurt',
@@ -683,12 +708,30 @@ List<ApprovalStore> stores = <ApprovalStore>[
     6,
   ),
 ];
+*/
+//sample
+List<ApprovalStore> createSampleInstances(int count) {
+  List<ApprovalStore> instances = [];
+  for (int i = 0; i < count; i++) {
+    instances.add(ApprovalStore(
+      "profile_pic_$i.jpg",
+      "Store $i",
+      "City $i",
+      "123456789$i",
+      "store$i@example.com",
+      0.1 * i,
+      "Owner $i",
+    ));
+  }
+  return instances;
+}
 
+List<ApprovalStore> stores = createSampleInstances(100);
 List<ApprovalStore> _dessertsX3 = stores.toList()
   ..addAll(stores.map((i) => ApprovalStore('${i.profilePic} x2', i.storeName,
-      i.city, i.mobile, i.email, i.adminShare, i.ownerName, i.iron)))
+      i.city, i.mobile, i.email, i.adminShare, i.ownerName)))
   ..addAll(stores.map((i) => ApprovalStore('${i.profilePic} x3', i.storeName,
-      i.city, i.mobile, i.email, i.adminShare, i.ownerName, i.iron)));
+      i.city, i.mobile, i.email, i.adminShare, i.ownerName)));
 
 _showSnackbar(BuildContext context, String text, [Color? color]) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

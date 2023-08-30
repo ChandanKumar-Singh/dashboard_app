@@ -450,7 +450,7 @@ class SideMenu extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            capText('@Copyright 2023', context),
+                            capText('@Copyright 2023'),
                           ],
                         ),
                         height10(),
@@ -471,7 +471,7 @@ class SideMenu extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         height10(),
-        bodyMedText(s, context, color: getTheme.colorScheme.primary),
+        bodyMedText(s,  color: getTheme.colorScheme.primary),
         height5(),
       ],
     );

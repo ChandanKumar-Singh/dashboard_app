@@ -85,7 +85,7 @@ class _CommonHeaderState extends State<CommonHeader> {
                       : Colors.transparent,
                 ),
                 child: Center(
-                  child: capText(e.toUpperCase(), context,
+                  child: capText(e.toUpperCase(),
                       color: provider.section == index
                           ? Theme.of(context).textTheme.titleLarge?.color
                           : Theme.of(context)
@@ -161,7 +161,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       : Colors.transparent,
                 ),
                 child: Center(
-                  child: capText(e.toUpperCase(), context,
+                  child: capText(e.toUpperCase(),
                       color: provider.section == index
                           ? Theme.of(context).textTheme.titleLarge?.color
                           : Theme.of(context)

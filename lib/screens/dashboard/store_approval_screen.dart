@@ -104,28 +104,28 @@ class AsyncPaginatedDataTable2DemoState
   ) {
     var columnName = "name";
     switch (columnIndex) {
-      case 1:
+      case 0:
         columnName = "#";
         break;
-      case 2:
+      case 1:
         columnName = "profile pic";
         break;
-      case 3:
+      case 2:
         columnName = "store name";
         break;
-      case 4:
+      case 3:
         columnName = "city";
         break;
-      case 5:
+      case 4:
         columnName = "mobile";
         break;
-      case 6:
+      case 5:
         columnName = "email";
         break;
-      case 7:
+      case 6:
         columnName = "admin share";
         break;
-      case 8:
+      case 7:
         columnName = "owner name";
         break;
     }
@@ -144,43 +144,39 @@ class AsyncPaginatedDataTable2DemoState
 
   List<DataColumn> get _columns {
     return [
-      DataColumn(
-        label: const Text('Desert'),
+      DataColumn2(
+        label: const Text('#'),
+        onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
+        size: ColumnSize.S,
+        fixedWidth: 40,
+
+      ),
+      DataColumn2(
+          label: const Text('Profile'),
+          onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
+          fixedWidth: 80),
+      DataColumn2(
+        label: const Text('Store Name'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
-      DataColumn(
-        label: const Text('Calories'),
-        numeric: true,
+      DataColumn2(
+        label: const Text('City'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
-      DataColumn(
-        label: const Text('Fat (gm)'),
-        numeric: true,
+      DataColumn2(
+        label: const Text('Mobile'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
-      DataColumn(
-        label: const Text('Carbs (gm)'),
-        numeric: true,
+      DataColumn2(
+        label: const Text('Email'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
-      DataColumn(
-        label: const Text('Protein (gm)'),
-        numeric: true,
+      DataColumn2(
+        label: const Text('Amin Share'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
-      DataColumn(
-        label: const Text('Sodium (mg)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Calcium (%)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Iron (%)'),
-        numeric: true,
+      DataColumn2(
+        label: const Text('Owner Name'),
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
       ),
     ];
@@ -197,10 +193,12 @@ class AsyncPaginatedDataTable2DemoState
 
     return Stack(alignment: Alignment.bottomCenter, children: [
       AsyncPaginatedDataTable2(
-          horizontalMargin: 20,
+          showCheckboxColumn: false,
+          // horizontalMargin: 20,
           checkboxHorizontalMargin: 12,
-          columnSpacing: 0,
+          columnSpacing: 10,
           wrapInCard: false,
+
 //           header: Row(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //               mainAxisSize: MainAxisSize.max,
@@ -237,7 +235,7 @@ class AsyncPaginatedDataTable2DemoState
           autoRowsToHeight: true,
           pageSyncApproach: PageSyncApproach.goToFirst,
           minWidth: 800,
-          fit: FlexFit.loose,
+          fit: FlexFit.tight,
           border: TableBorder(
             borderRadius: BorderRadius.circular(10),
             top: BorderSide(color: Colors.grey[300]!),
@@ -294,10 +292,13 @@ class _ErrorAndRetry extends StatelessWidget {
   Widget build(BuildContext context) => Center(
         child: Container(
             padding: const EdgeInsets.all(10),
-            height: 70,
-            color: Colors.red,
+            // height: 70,
+            decoration: BoxDecoration(
+                color: getTheme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(10)),
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Oops! $errorMessage',
                       style: const TextStyle(color: Colors.white)),

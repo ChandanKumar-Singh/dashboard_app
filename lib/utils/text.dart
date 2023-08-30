@@ -1,11 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
+import 'package:my_dashboard/utils/sizedbox_utils.dart';
 
 Text capText(
-  String text,
-  BuildContext context, {
+  String text, {
   TextAlign? textAlign,
   int? maxLines,
   TextOverflow? overflow,
@@ -24,18 +29,17 @@ Text capText(
       maxLines: maxLines ?? 3,
       style: GoogleFonts.ubuntu(
         textStyle: style ??
-            Theme.of(context).textTheme.bodySmall!.copyWith(
+            getTheme.textTheme.bodySmall!.copyWith(
                 fontWeight: fontWeight,
                 letterSpacing: letterSpacing,
-                color: color ?? Theme.of(context).textTheme.bodyMedium!.color,
+                color: color ?? getTheme.textTheme.bodyMedium!.color,
                 fontSize: fontSize,
                 height: lineHeight,
                 decoration: decoration),
       ),
     );
 Text bodyMedText(
-  String text,
-  BuildContext context, {
+  String text, {
   TextAlign? textAlign,
   int? maxLines,
   TextOverflow? overflow,
@@ -54,7 +58,7 @@ Text bodyMedText(
       maxLines: maxLines ?? 3,
       style: GoogleFonts.ubuntu(
         textStyle: style ??
-            Theme.of(context).textTheme.bodyMedium!.copyWith(
+            getTheme.textTheme.bodyMedium!.copyWith(
                 fontWeight: fontWeight,
                 letterSpacing: letterSpacing,
                 color: color,
@@ -64,8 +68,7 @@ Text bodyMedText(
       ),
     );
 Text bodyLargeText(
-  String text,
-  BuildContext context, {
+  String text, {
   TextAlign? textAlign,
   int? maxLines,
   TextOverflow? overflow,
@@ -84,7 +87,7 @@ Text bodyLargeText(
       maxLines: maxLines ?? 3,
       style: GoogleFonts.ubuntu(
         textStyle: style ??
-            Theme.of(context).textTheme.bodyLarge!.copyWith(
+            getTheme.textTheme.bodyLarge!.copyWith(
                 fontWeight: fontWeight ?? FontWeight.bold,
                 letterSpacing: letterSpacing,
                 color: color,
@@ -94,8 +97,7 @@ Text bodyLargeText(
       ),
     );
 Text titleLargeText(
-  String text,
-  BuildContext context, {
+  String text, {
   TextAlign? textAlign,
   int? maxLines,
   TextOverflow? overflow,
@@ -114,7 +116,7 @@ Text titleLargeText(
       maxLines: maxLines ?? 3,
       style: GoogleFonts.ubuntu(
         textStyle: style ??
-            Theme.of(context).textTheme.titleLarge!.copyWith(
+            getTheme.textTheme.titleLarge!.copyWith(
                 fontWeight: fontWeight ?? FontWeight.bold,
                 letterSpacing: letterSpacing,
                 color: color,

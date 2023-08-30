@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            titleLargeText('Employment History', context),
+            titleLargeText('Employment History'),
             height20(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,9 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Icon(Icons.circle, size: 10, color: theme.splashColor),
                     width10(),
-                    bodyLargeText('Flutter Developer', context),
+                    bodyLargeText('Flutter Developer'),
                     width10(),
-                    capText('at Cubic Quest Technologies (Lukhnow)', context),
+                    capText('at Cubic Quest Technologies (Lukhnow)'),
                   ],
                 ),
                 height10(),
@@ -140,10 +140,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Icon(Icons.circle, size: 10, color: theme.splashColor),
                     width10(),
-                    bodyLargeText('Flutter Developer', context),
+                    bodyLargeText('Flutter Developer'),
                     width10(),
                     capText(
-                        'in 2023 at Touchwood Technologies (Mohali)', context),
+                        'in 2023 at Touchwood Technologies (Mohali)'),
                   ],
                 ),
               ],
@@ -158,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            titleLargeText('Skill', context),
+            titleLargeText('Skill'),
             height10(),
             Wrap(
               runSpacing: 10,
@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 ...skills.map(
                   (skill) => ChoiceChip(
-                      label: capText(skill, context), selected: false),
+                      label: capText(skill), selected: false),
                 ),
               ],
             )
@@ -225,13 +225,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  titleLargeText('Chandan Kumar Singh', context),
+                  titleLargeText('Chandan Kumar Singh'),
                   const SizedBox(height: 10),
                   Row(
                     children: [
                       const Icon(Icons.location_on_sharp, size: 15),
                       width5(),
-                      capText('Mohali, Chnadigarh', context),
+                      capText('Mohali, Chnadigarh')
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -240,17 +240,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       const Icon(Icons.approval, size: 15),
                       width5(),
-                      capText('@kchandankusingh', context),
+                      capText('@kchandankusingh'),
                       width10(),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           capText(
-                              '🧑‍💻  Flutter Developer at Mohali', context),
+                              '🧑‍💻  Flutter Developer at Mohali'),
                         ],
                       ),
                       width10(),
-                      capText('Full-Time', context,
+                      capText('Full-Time',
                           color: theme.textTheme.bodyMedium?.color!
                               .withOpacity(0.5)),
                     ],
@@ -259,12 +259,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Wrap(
                     children: [
                       OutlinedButton(
-                          onPressed: () {}, child: capText('Message', context)),
+                          onPressed: () {}, child: capText('Message')),
                       width10(),
                       FilledButton.icon(
                           onPressed: () {},
                           icon: const Icon(CupertinoIcons.share_up, size: 15),
-                          label: capText('Share Profile', context,
+                          label: capText('Share Profile',
                               color: Colors.white))
                     ],
                   )
