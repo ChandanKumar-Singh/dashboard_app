@@ -3,23 +3,18 @@ import 'dart:async';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:my_dashboard/screens/dashboard/components/recent_files.dart';
-import '../../data/data_sources.dart';
-import '../../models/RecentFile.dart';
-import '../../widgets/rich_text_editor.dart';
+import 'package:intl/intl.dart';
+import '../../responsive.dart';
+import '../../utils/logger.dart';
+import '../../utils/picture_utils.dart';
+import '../../utils/text.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
-import '/screens/dashboard/components/default_caontainer.dart';
-import '/screens/dashboard/components/edit_profile.dart';
-import '/utils/dialogs.dart';
 import '/utils/sizedbox_utils.dart';
-import '/utils/text.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../constants.dart';
-import '../../responsive.dart';
 
 import 'components/profile/profile_header.dart';
 
@@ -47,7 +42,7 @@ class _StoreApprovalScreenState extends State<StoreApprovalScreen> {
               children: [
                 const CommonHeader(),
                 const SizedBox(height: defaultPadding),
-                Expanded(child: AsyncPaginatedDataTable2Demo())
+                Expanded(child: _StoreApprovalAsyncPaginatedDataTable2())
               ],
             ),
           ),
@@ -57,20 +52,20 @@ class _StoreApprovalScreenState extends State<StoreApprovalScreen> {
   }
 }
 
-class AsyncPaginatedDataTable2Demo extends StatefulWidget {
-  const AsyncPaginatedDataTable2Demo({super.key});
+class _StoreApprovalAsyncPaginatedDataTable2 extends StatefulWidget {
+  const _StoreApprovalAsyncPaginatedDataTable2({super.key});
 
   @override
-  AsyncPaginatedDataTable2DemoState createState() =>
-      AsyncPaginatedDataTable2DemoState();
+  _StoreApprovalAsyncPaginatedDataTable2State createState() =>
+      _StoreApprovalAsyncPaginatedDataTable2State();
 }
 
-class AsyncPaginatedDataTable2DemoState
-    extends State<AsyncPaginatedDataTable2Demo> {
+class _StoreApprovalAsyncPaginatedDataTable2State
+    extends State<_StoreApprovalAsyncPaginatedDataTable2> {
   int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
   bool _sortAscending = true;
   int? _sortColumnIndex;
-  StoreListApprovalSourceAsync? _dessertsDataSource;
+  _StoreListApprovalSourceAsync? _dessertsDataSource;
   final PaginatorController _controller = PaginatorController();
 
   bool _dataSourceLoading = false;
@@ -86,7 +81,7 @@ class AsyncPaginatedDataTable2DemoState
         //     : false
         //         ? DessertDataSourceAsync.error()
         //         :
-        StoreListApprovalSourceAsync();
+        _StoreListApprovalSourceAsync();
 
     if (false) {
       _dataSourceLoading = true;
@@ -149,7 +144,6 @@ class AsyncPaginatedDataTable2DemoState
         onSort: (columnIndex, ascending) => sort(columnIndex, ascending),
         size: ColumnSize.S,
         fixedWidth: 40,
-
       ),
       DataColumn2(
           label: const Text('Profile'),
@@ -448,360 +442,274 @@ class _TitledRangeSelectorState extends State<_TitledRangeSelector> {
   }
 }
 
-/*
-class _StoreListTable extends StatefulWidget {
-  const _StoreListTable({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<_StoreListTable> createState() => _StoreListTableState();
-}
-
-class _StoreListTableState extends State<_StoreListTable> {
-  bool aToz = true;
-  bool latest = true;
-  bool larger = true;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(defaultPadding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).canvasColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Store List (Waiting for Approval)",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Expanded(
-            // width: double.infinity,
-            // height: 300,
-            child: DataTable2(
-              isHorizontalScrollBarVisible: true,
-              isVerticalScrollBarVisible: true,
-              columnSpacing: defaultPadding,
-              minWidth: 600,
-              columns: [
-                DataColumn(
-                    label: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text("#"),
-                        Icon(
-                            aToz
-                                ? Icons.arrow_drop_down_rounded
-                                : Icons.arrow_drop_up_rounded,
-                            size: 16)
-                      ],
-                    ),
-                    onSort: (i, v) {
-                      setState(() {
-                        demoRecentFiles.sort((_a, _b) {
-                          var a;
-                          var b;
-                          a = aToz ? _b : _a;
-                          b = aToz ? _a : _b;
-                          return b.title
-                              .toString()
-                              .compareTo(a.title.toString());
-                        });
-                        aToz = !aToz;
-                      });
-                    }),
-                DataColumn(
-                    label: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("File Name"),
-                        Icon(
-                            aToz
-                                ? Icons.arrow_upward_rounded
-                                : Icons.arrow_downward_rounded,
-                            size: 16)
-                      ],
-                    ),
-                    onSort: (i, v) {
-                      setState(() {
-                        demoRecentFiles.sort((_a, _b) {
-                          var a;
-                          var b;
-                          a = aToz ? _b : _a;
-                          b = aToz ? _a : _b;
-                          return b.title
-                              .toString()
-                              .compareTo(a.title.toString());
-                        });
-                        aToz = !aToz;
-                      });
-                    }),
-                DataColumn(
-                    label: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Date"),
-                        Icon(
-                            !latest
-                                ? Icons.arrow_upward_rounded
-                                : Icons.arrow_downward_rounded,
-                            size: 16)
-                      ],
-                    ),
-                    onSort: (i, v) {
-                      setState(() {
-                        demoRecentFiles.sort((_a, _b) {
-                          var a;
-                          var b;
-                          a = !latest ? _b : _a;
-                          b = latest ? _a : _b;
-                          return DateTime.parse(b.date
-                                      .toString()
-                                      .split('-')
-                                      .reversed
-                                      .toList()
-                                      .join('-'))
-                                  .isAfter(DateTime.parse(a.date
-                                      .toString()
-                                      .split('-')
-                                      .reversed
-                                      .toList()
-                                      .join('-')))
-                              ? 0
-                              : 1;
-                        });
-                        latest = !latest;
-                      });
-                    }),
-                DataColumn(
-                    label: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Size"),
-                        Icon(
-                            !larger
-                                ? Icons.arrow_upward_rounded
-                                : Icons.arrow_downward_rounded,
-                            size: 16)
-                      ],
-                    ),
-                    onSort: (i, v) {
-                      setState(() {
-                        demoRecentFiles.sort((_a, _b) {
-                          var a;
-                          var b;
-                          a = larger ? _b : _a;
-                          b = !larger ? _a : _b;
-                          return b.size.toString().compareTo(a.size.toString());
-                        });
-                        larger = !larger;
-                      });
-                    }),
-              ],
-              rows: List.generate(
-                demoRecentFiles.length,
-                (index) => recentFileDataRow(demoRecentFiles[index], index),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+int _idCounter = 0;
+class _ApprovalStore {
+  _ApprovalStore(
+    this.profilePic,
+    this.storeName,
+    this.city,
+    this.mobile,
+    this.email,
+    this.adminShare,
+    this.ownerName,
+  ) {
+    profilePic = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
   }
+
+  final int id = _idCounter++;
+
+  String profilePic;
+  final String storeName;
+  final String city;
+  final String mobile; // 10 digit mobile number with country code
+  final String email;
+  final double adminShare;
+  final String ownerName;
+  bool selected = false;
 }
 
-DataRow recentFileDataRow(RecentFile fileInfo, int index) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Text(index.toString()),
-        ),
-      ),
-      DataCell(
-        Row(
-          children: [
-            SvgPicture.asset(
-              fileInfo.icon!,
-              height: 30,
-              width: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Text(fileInfo.title!),
-            ),
-          ],
-        ),
-      ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
-    ],
-  );
-}
-*/
-/*
+class _StoreListApprovalSourceAsync extends AsyncDataTableSource {
+  final String tag = 'StoreListApprovalSourceAsync';
+  _StoreListApprovalSourceAsync() {
+    infoLog('DessertDataSourceAsync created', tag);
+  }
 
+  _StoreListApprovalSourceAsync.empty() {
+    _empty = true;
+    infoLog('DessertDataSourceAsync.empty created', tag);
+  }
 
-class PaginatedDataTable2Demo extends StatefulWidget {
-  const PaginatedDataTable2Demo({super.key});
+  _StoreListApprovalSourceAsync.error() {
+    _errorCounter = 0;
+    infoLog('DessertDataSourceAsync.error created', tag);
+  }
 
-  @override
-  PaginatedDataTable2DemoState createState() => PaginatedDataTable2DemoState();
-}
+  bool _empty = false;
+  int? _errorCounter;
 
-class PaginatedDataTable2DemoState extends State<PaginatedDataTable2Demo> {
-  int _rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  RangeValues? _caloriesFilter;
+
+  RangeValues? get caloriesFilter => _caloriesFilter;
+  set caloriesFilter(RangeValues? calories) {
+    _caloriesFilter = calories;
+    refreshDatasource();
+  }
+
+  final _StoreListApprovalService _repo = _StoreListApprovalService();
+
+  String _sortColumn = "name";
   bool _sortAscending = true;
-  int? _sortColumnIndex;
-  late DessertDataSource _dessertsDataSource;
-  bool _initialized = false;
-  PaginatorController? _controller;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_initialized) {
-      _dessertsDataSource = DessertDataSource(
-          context, true);
-
-      _controller = PaginatorController();
-
-        _sortColumnIndex = 1;
-      _initialized = true;
-    }
+  void sort(String columnName, bool ascending) {
+    _sortColumn = columnName;
+    _sortAscending = ascending;
+    refreshDatasource();
   }
 
-  void sort<T>(
-      Comparable<T> Function(Dessert d) getField,
-      int columnIndex,
-      bool ascending,
-      ) {
-    _dessertsDataSource.sort<T>(getField, ascending);
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _sortAscending = ascending;
+  Future<int> getTotalRecords() {
+    return Future<int>.delayed(
+        const Duration(milliseconds: 0), () => _empty ? 0 : _dessertsX3.length);
+  }
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    warningLog('getRows($startIndex, $count)', tag);
+    if (_errorCounter != null) {
+      _errorCounter = _errorCounter! + 1;
+
+      if (_errorCounter! % 2 == 1) {
+        await Future.delayed(const Duration(milliseconds: 1000));
+        throw 'Error #${((_errorCounter! - 1) / 2).round() + 1} has occurred';
+      }
+    }
+
+    final format =
+        NumberFormat.decimalPercentPattern(locale: 'en', decimalDigits: 0);
+    assert(startIndex >= 0);
+
+    // List returned will be empty is there're fewer items than startingAt
+    var newData = _empty
+        ? await Future.delayed(const Duration(milliseconds: 2000),
+            () => _StoreListApprovalServiceResponse(0, []))
+        : await _repo.getData(
+            startIndex, count, _caloriesFilter, _sortColumn, _sortAscending);
+
+    var response = AsyncRowsResponse(
+        newData.totalRecords,
+        newData.data.map((store) {
+          return DataRow(
+            key: ValueKey<int>(store.id),
+            selected: store.selected,
+            onSelectChanged: (value) {
+              if (value != null) {
+                setRowSelection(ValueKey<int>(store.id), value);
+              }
+            },
+            cells: [
+              DataCell(Text(store.id.toString())),
+              DataCell(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35),
+                  if (!Responsive.isDesktop())
+                    GestureDetector(
+                      onTap: () {
+                        errorLog('Profile pic is id ${store.id}');
+                      },
+                      child: Icon(Icons.launch_outlined,
+                          color: getTheme.colorScheme.primary, size: 20),
+                    )
+                ],
+              )),
+              DataCell(Text(store.storeName)),
+              DataCell(Text(store.city)),
+              DataCell(Text(store.mobile)),
+              DataCell(Row(
+                children: [
+                  Expanded(
+                      child: capText(store.email,
+                          maxLines: 1, overflow: TextOverflow.ellipsis)),
+                  width5(),
+                  GestureDetector(
+                    onTap: () {
+                      errorLog('email is ${store.email}');
+                    },
+                    child: Icon(Icons.copy,
+                        color: getTheme.colorScheme.primary, size: 10),
+                  )
+                ],
+              )),
+              DataCell(Text('${store.adminShare.toStringAsFixed(1)}%')),
+              DataCell(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(store.ownerName),
+                  if (Responsive.isDesktop())
+                    GestureDetector(
+                      onTap: () {
+                        errorLog('Profile pic is id ${store.id}');
+                      },
+                      child: Icon(Icons.launch_outlined,
+                          color: getTheme.colorScheme.primary, size: 20),
+                    )
+                ],
+              )), // DataCell(Text(format.format(store.iron / 100))),
+            ],
+          );
+        }).toList());
+
+    return response;
+  }
+}
+
+class _StoreListApprovalServiceResponse {
+  _StoreListApprovalServiceResponse(this.totalRecords, this.data);
+
+  /// THe total ammount of records on the server, e.g. 100
+  final int totalRecords;
+
+  /// One page, e.g. 10 reocrds
+  final List<_ApprovalStore> data;
+}
+
+class _StoreListApprovalService {
+  int Function(_ApprovalStore, _ApprovalStore)? _getComparisonFunction(
+      String column, bool ascending) {
+    infoLog('Column name is $column', '_getComparisonFunction');
+    var coef = ascending ? 1 : -1;
+    switch (column) {
+      case '#':
+        infoLog('Column name is $column', '_getComparisonFunction', '#');
+        return (_ApprovalStore d1, _ApprovalStore d2) => coef * (d1.id - d2.id);
+      case 'profile pic':
+        infoLog(
+            'Column name is $column', '_getComparisonFunction', 'profile pic');
+      // return (ApprovalStore d1, ApprovalStore d2) =>
+      //     coef * (d1.profilePic.compareTo(d2.profilePic));
+      case 'store name':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.storeName.compareTo(d2.storeName));
+      case 'city':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.city.compareTo(d2.city));
+      case 'mobile':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.mobile.compareTo(d2.mobile));
+      case 'email':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.email.compareTo(d2.email));
+      case 'admin share':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.adminShare - d2.adminShare).round();
+      case 'owner name':
+        return (_ApprovalStore d1, _ApprovalStore d2) =>
+            coef * (d1.ownerName.compareTo(d2.ownerName));
+    }
+
+    return null;
+  }
+
+  Future<_StoreListApprovalServiceResponse> getData(int startingAt, int count,
+      RangeValues? caloriesFilter, String sortedBy, bool sortedAsc) async {
+    return Future.delayed(
+        Duration(
+            milliseconds: startingAt == 0
+                ? 1000
+                : startingAt < 20
+                    ? 500
+                    : 200), () {
+      var result = _dessertsX3;
+/*
+      if (caloriesFilter != null) {
+        result = result
+            .where((e) =>
+                e.storeName >= caloriesFilter.start &&
+                e.storeName <= caloriesFilter.end)
+            .toList();
+      }
+*/
+
+      try {
+        result.sort(_getComparisonFunction(sortedBy, sortedAsc));
+      } catch (e) {
+        print(e);
+      }
+
+      return _StoreListApprovalServiceResponse(
+          result.length, result.skip(startingAt).take(count).toList());
     });
   }
-
-  @override
-  void dispose() {
-    _dessertsDataSource.dispose();
-    super.dispose();
-  }
-
-  List<DataColumn> get _columns {
-    return [
-      DataColumn(
-        label: const Text('Desert'),
-        onSort: (columnIndex, ascending) =>
-            sort<String>((d) => d.name, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Calories'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.calories, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Fat (gm)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.fat, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Carbs (gm)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.carbs, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Protein (gm)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.protein, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Sodium (mg)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.sodium, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Calcium (%)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.calcium, columnIndex, ascending),
-      ),
-      DataColumn(
-        label: const Text('Iron (%)'),
-        numeric: true,
-        onSort: (columnIndex, ascending) =>
-            sort<num>((d) => d.iron, columnIndex, ascending),
-      ),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      PaginatedDataTable2(
-        // availableRowsPerPage: const [2, 5, 10, 30, 100],
-        horizontalMargin: 20,
-        // checkboxHorizontalMargin: 12,
-        columnSpacing: paddingDefault,
-        wrapInCard: true,
-        renderEmptyRowsInTheEnd: false,
-        // headingRowColor:
-        // MaterialStateColor.resolveWith((states) => Colors.grey[200]!),
-        rowsPerPage: _rowsPerPage,
-        autoRowsToHeight: true,
-        // minWidth: 800,
-        fit: FlexFit.loose,
-        border: TableBorder(
-            top: const BorderSide(color: Colors.black),
-            bottom: BorderSide(color: Colors.grey[300]!),
-            left: BorderSide(color: Colors.grey[300]!),
-            right: BorderSide(color: Colors.grey[300]!),
-            // verticalInside: BorderSide(color: Colors.grey[300]!),
-            // horizontalInside: const BorderSide(color: Colors.grey, width: 1),
-        ),
-        onRowsPerPageChanged: (value) {
-          // No need to wrap into setState, it will be called inside the widget
-          // and trigger rebuild
-          //setState(() {
-          _rowsPerPage = value!;
-          print(_rowsPerPage);
-          //});
-        },
-        initialFirstRowIndex: 0,
-        onPageChanged: (rowIndex) {
-          print(rowIndex / _rowsPerPage);
-        },
-        sortColumnIndex: _sortColumnIndex,
-        sortAscending: _sortAscending,
-        sortArrowIcon: Icons.keyboard_arrow_up, // custom arrow
-        sortArrowAnimationDuration:
-        const Duration(milliseconds: 0), // custom animation duration
-        onSelectAll: _dessertsDataSource.selectAll,
-        controller:
-         _controller,
-        hidePaginator: false,
-        columns: _columns,
-        empty: Center(
-            child: Container(
-                padding: const EdgeInsets.all(20),
-                // color: Colors.grey[200],
-                child: const Text('No data'))),
-        source: false
-            ? DessertDataSource.empty(context)
-            : _dessertsDataSource,
-      ),
-        // Positioned(bottom: 16, child: CustomPager(_controller!))
-    ]);
-  }
 }
-*/
+
+int _selectedCount = 0;
+//sample
+List<_ApprovalStore> _createSampleInstances(int count) {
+  List<_ApprovalStore> instances = [];
+  for (int i = 0; i < count; i++) {
+    instances.add(_ApprovalStore(
+      "profile_pic_$i.jpg",
+      "Store $i",
+      "City $i",
+      "123456789$i",
+      "store$i@example.com",
+      0.1 * i,
+      "Owner $i",
+    ));
+  }
+  return instances;
+}
+
+List<_ApprovalStore> _stores = _createSampleInstances(100);
+List<_ApprovalStore> _dessertsX3 = _stores.toList()
+  ..addAll(_stores.map((i) => _ApprovalStore('${i.profilePic} x2', i.storeName,
+      i.city, i.mobile, i.email, i.adminShare, i.ownerName)))
+  ..addAll(_stores.map((i) => _ApprovalStore('${i.profilePic} x3', i.storeName,
+      i.city, i.mobile, i.email, i.adminShare, i.ownerName)));
+
+_showSnackbar(BuildContext context, String text, [Color? color]) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: color,
+    duration: const Duration(seconds: 1),
+    content: Text(text),
+  ));
+}
