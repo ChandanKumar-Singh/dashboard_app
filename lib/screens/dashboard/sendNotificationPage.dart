@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
@@ -253,7 +255,9 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                       child: Container(
                         constraints:
                             const BoxConstraints(maxHeight: 200, maxWidth: 250),
-                        child: Image.network(image!.path),
+                        child: kIsWeb
+                            ? Image.network(image!.path)
+                            : Image.file(File(image!.path)),
                       ),
                     ),
                   ],
@@ -270,8 +274,8 @@ class _SendNotificationPageState extends State<SendNotificationPage> {
                         primaryFocus?.unfocus();
                         _formKey.currentState?.validate();
                       },
-                      child: bodyLargeText('Confirm & Send',
-                          color: Colors.white)),
+                      child:
+                          bodyLargeText('Confirm & Send', color: Colors.white)),
                 ],
               ),
             ],
@@ -362,7 +366,6 @@ class _UpdateAppAssets extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           bodyLargeText(
             "App Logo",
-
             fontWeight: FontWeight.normal,
             style: const TextStyle(
               fontSize: 18,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -5,6 +7,8 @@ import 'package:my_dashboard/utils/logger.dart';
 import 'package:my_dashboard/utils/picture_utils.dart';
 import 'package:my_dashboard/utils/sizedbox_utils.dart';
 import 'package:my_dashboard/utils/text.dart';
+
+import '../responsive.dart';
 
 class RestorableDessertSelections extends RestorableProperty<Set<int>> {
   Set<int> _dessertSelections = {};
@@ -293,8 +297,20 @@ class StoreListApprovalSourceAsync extends AsyncDataTableSource {
             },
             cells: [
               DataCell(Text(store.id.toString())),
-              DataCell(
-                  buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35)),
+              DataCell(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35),
+                  if (!Responsive.isDesktop())
+                    GestureDetector(
+                      onTap: () {
+                        errorLog('Profile pic is id ${store.id}');
+                      },
+                      child: Icon(Icons.launch_outlined,
+                          color: getTheme.colorScheme.primary, size: 20),
+                    )
+                ],
+              )),
               DataCell(Text(store.storeName)),
               DataCell(Text(store.city)),
               DataCell(Text(store.mobile)),
@@ -314,8 +330,20 @@ class StoreListApprovalSourceAsync extends AsyncDataTableSource {
                 ],
               )),
               DataCell(Text('${store.adminShare.toStringAsFixed(1)}%')),
-              DataCell(Text(store.ownerName)),
-              // DataCell(Text(format.format(store.iron / 100))),
+              DataCell(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(store.ownerName),
+                  if (Responsive.isDesktop())
+                    GestureDetector(
+                      onTap: () {
+                        errorLog('Profile pic is id ${store.id}');
+                      },
+                      child: Icon(Icons.launch_outlined,
+                          color: getTheme.colorScheme.primary, size: 20),
+                    )
+                ],
+              )), // DataCell(Text(format.format(store.iron / 100))),
             ],
           );
         }).toList());

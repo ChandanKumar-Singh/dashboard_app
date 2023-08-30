@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget getScreen(MenuProvider menuProvider) {
     switch (menuProvider.sideMenu) {
       case 'Dashboard':
-        return const StoreApprovalScreen();
+        return const DashboardScreen();
       case 'Transaction':
         return const DashboardScreen();
       case 'Task':
