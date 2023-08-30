@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../responsive.dart';
 import '../../../utils/logger.dart';
@@ -18,14 +19,14 @@ import '../../../constants.dart';
 
 import '../components/profile/profile_header.dart';
 
-class StoreApprovalScreen extends StatefulWidget {
-  const StoreApprovalScreen({super.key});
+class StoreEarningPaymentsScreen extends StatefulWidget {
+  const StoreEarningPaymentsScreen({super.key});
 
   @override
-  State<StoreApprovalScreen> createState() => _StoreApprovalScreenState();
+  State<StoreEarningPaymentsScreen> createState() => _StoreEarningPaymentsScreenState();
 }
 
-class _StoreApprovalScreenState extends State<StoreApprovalScreen> {
+class _StoreEarningPaymentsScreenState extends State<StoreEarningPaymentsScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final authProvider = sl.get<AuthProvider>();
@@ -193,38 +194,45 @@ class _StoreApprovalAsyncPaginatedDataTable2State
           columnSpacing: 10,
           wrapInCard: false,
 
-//           header: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               mainAxisSize: MainAxisSize.max,
-//               children: [
-//                 //TODO: Range Selector
-// /*                _TitledRangeSelector(
-//                     range: const RangeValues(150, 600),
-//                     onChanged: (v) {
-//                       // If the curren row/current page happens to be larger than
-//                       // the total rows/total number of pages what would happen is determined by
-//                       // [pageSyncApproach] field
-//                       _dessertsDataSource!.caloriesFilter = v;
-//                     },
-//                     key: _rangeSelectorKey,
-//                     title: 'AsyncPaginatedDataTable2',
-//                     caption: 'Calories'),*/
-//                 // if (kDebugMode && getCurrentRouteOption(context) == custPager)
-//
-//                 //TODO:Page Jumper
-// /*
-//                 Row(children: [
-//                   OutlinedButton(
-//                       onPressed: () => _controller.goToPageWithRow(25),
-//                       child: const Text('Go to row 25')),
-//                   OutlinedButton(
-//                       onPressed: () => _controller.goToRow(5),
-//                       child: const Text('Go to row 5'))
-//                 ]),
-// */
-//                 // if (getCurrentRouteOption(context) == custPager)
-//                 //   PageNumber(controller: _controller)
-//               ]),
+          header: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                          constraints:
+                          BoxConstraints(maxWidth: 150, minWidth: 100),
+                          child: TextFormField()),
+                    ],
+                  ),
+                ),
+                width10(),
+                Builder(builder: (context) {
+                  return Row(children: [
+                    Responsive.isMobile(context)
+                        ? IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.print, color: Colors.teal))
+                        : OutlinedButton(
+                        onPressed: () => _controller.goToPageWithRow(25),
+                        child: const Text('Print')),
+                    width10(),
+                    Responsive.isMobile(context)
+                        ? IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.picture_as_pdf_outlined,
+                            color: Colors.teal))
+                        : OutlinedButton(
+                        onPressed: () => _controller.goToPageWithRow(25),
+                        child: const Text('Print')),
+                  ]);
+                }),
+
+                // if (getCurrentRouteOption(context) == custPager)
+                //   PageNumber(controller: _controller)
+              ]),
           rowsPerPage: _rowsPerPage,
           autoRowsToHeight: true,
           pageSyncApproach: PageSyncApproach.goToFirst,
@@ -551,7 +559,7 @@ class _StoreListApprovalSourceAsync extends AsyncDataTableSource {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35),
-                  if (!Responsive.isDesktop())
+                  if (!Responsive.isDesktop(Get.context!))
                     GestureDetector(
                       onTap: () {
                         errorLog('Profile pic is id ${store.id}');
@@ -584,7 +592,7 @@ class _StoreListApprovalSourceAsync extends AsyncDataTableSource {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(store.ownerName),
-                  if (Responsive.isDesktop())
+                  if (Responsive.isDesktop(Get.context!))
                     GestureDetector(
                       onTap: () {
                         errorLog('Profile pic is id ${store.id}');

@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_dashboard/screens/dashboard/store/store_earning_paymnets_screen.dart';
+import 'package:my_dashboard/screens/dashboard/store/store_list_screen.dart';
 import 'package:my_dashboard/screens/dashboard/terms_and_conditions.dart';
 import '../../widgets/rich_text_editor.dart';
 import '../dashboard/about_us_page.dart';
 import '../dashboard/list_notifications.dart';
 import '../dashboard/sendNotificationPage.dart';
-import '../dashboard/store_approval_screen.dart';
+import '../dashboard/store/store_approval_screen.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
 import '/screens/dashboard/profile_screen.dart';
@@ -112,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget getScreen(MenuProvider menuProvider) {
     switch (menuProvider.sideMenu) {
       case 'Dashboard':
-        return const DashboardScreen();
+        return const StoreApprovalScreen();
       case 'Transaction':
         return const DashboardScreen();
       case 'Task':
@@ -121,7 +123,11 @@ class _MainScreenState extends State<MainScreen> {
         return const DashboardScreen();
       case 'Store':
         return const DashboardScreen();
-      case 'Store Approval':
+      case 'Store List':
+        return const StoreListScreen();
+       case 'Store Earning/Payments':
+        return const StoreEarningPaymentsScreen();
+       case 'Store Approval':
         return const StoreApprovalScreen();
       case 'Send Notifications':
         return const SendNotificationPage();

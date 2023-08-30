@@ -3,20 +3,21 @@ import 'dart:async';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../responsive.dart';
-import '../../utils/logger.dart';
-import '../../utils/picture_utils.dart';
-import '../../utils/text.dart';
+import '../../../responsive.dart';
+import '../../../utils/logger.dart';
+import '../../../utils/picture_utils.dart';
+import '../../../utils/text.dart';
 import '/controllers/auth_provider.dart';
 import '/database/model/response/base/sl_container.dart';
 import '/utils/sizedbox_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../constants.dart';
+import '../../../constants.dart';
 
-import 'components/profile/profile_header.dart';
+import '../components/profile/profile_header.dart';
 
 class StoreApprovalScreen extends StatefulWidget {
   const StoreApprovalScreen({super.key});
@@ -41,7 +42,6 @@ class _StoreApprovalScreenState extends State<StoreApprovalScreen> {
             child: Column(
               children: [
                 const CommonHeader(),
-                const SizedBox(height: defaultPadding),
                 Expanded(child: _StoreApprovalAsyncPaginatedDataTable2())
               ],
             ),
@@ -185,94 +185,96 @@ class _StoreApprovalAsyncPaginatedDataTable2State
     // Last ppage example uses extra API call to get the number of items in datasource
     if (_dataSourceLoading) return const SizedBox();
 
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      AsyncPaginatedDataTable2(
-          showCheckboxColumn: false,
-          // horizontalMargin: 20,
-          checkboxHorizontalMargin: 12,
-          columnSpacing: 10,
-          wrapInCard: false,
+    return AsyncPaginatedDataTable2(
+        showCheckboxColumn: false,
+        // horizontalMargin: 20,
+        checkboxHorizontalMargin: 12,
+        columnSpacing: 10,
+        wrapInCard: false,
+        header: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        constraints:
+                        BoxConstraints(maxWidth: 150, minWidth: 100),
+                        child: TextFormField()),
+                  ],
+                ),
+              ),
+              width10(),
+              Builder(builder: (context) {
+                return Row(children: [
+                  Responsive.isMobile(context)
+                      ? IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.print, color: Colors.teal))
+                      : OutlinedButton(
+                      onPressed: () => _controller.goToPageWithRow(25),
+                      child: const Text('Print')),
+                  width10(),
+                  Responsive.isMobile(context)
+                      ? IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.picture_as_pdf_outlined,
+                          color: Colors.teal))
+                      : OutlinedButton(
+                      onPressed: () => _controller.goToPageWithRow(25),
+                      child: const Text('Print')),
+                ]);
+              }),
 
-//           header: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               mainAxisSize: MainAxisSize.max,
-//               children: [
-//                 //TODO: Range Selector
-// /*                _TitledRangeSelector(
-//                     range: const RangeValues(150, 600),
-//                     onChanged: (v) {
-//                       // If the curren row/current page happens to be larger than
-//                       // the total rows/total number of pages what would happen is determined by
-//                       // [pageSyncApproach] field
-//                       _dessertsDataSource!.caloriesFilter = v;
-//                     },
-//                     key: _rangeSelectorKey,
-//                     title: 'AsyncPaginatedDataTable2',
-//                     caption: 'Calories'),*/
-//                 // if (kDebugMode && getCurrentRouteOption(context) == custPager)
-//
-//                 //TODO:Page Jumper
-// /*
-//                 Row(children: [
-//                   OutlinedButton(
-//                       onPressed: () => _controller.goToPageWithRow(25),
-//                       child: const Text('Go to row 25')),
-//                   OutlinedButton(
-//                       onPressed: () => _controller.goToRow(5),
-//                       child: const Text('Go to row 5'))
-//                 ]),
-// */
-//                 // if (getCurrentRouteOption(context) == custPager)
-//                 //   PageNumber(controller: _controller)
-//               ]),
-          rowsPerPage: _rowsPerPage,
-          autoRowsToHeight: true,
-          pageSyncApproach: PageSyncApproach.goToFirst,
-          minWidth: 800,
-          fit: FlexFit.tight,
-          border: TableBorder(
-            borderRadius: BorderRadius.circular(10),
-            top: BorderSide(color: Colors.grey[300]!),
-            bottom: BorderSide(color: Colors.grey[300]!),
-            left: BorderSide(color: Colors.grey[300]!),
-            right: BorderSide(color: Colors.grey[300]!),
-            // verticalInside: BorderSide(color: Colors.grey[300]!),
-            // horizontalInside: const BorderSide(color: Colors.grey, width: 1),
-          ),
-          onRowsPerPageChanged: (value) {
-            print('Row per page changed to $value');
-            _rowsPerPage = value!;
-          },
-          initialFirstRowIndex: _initialRow,
-          onPageChanged: (rowIndex) {
-            //print(rowIndex / _rowsPerPage);
-          },
-          sortColumnIndex: _sortColumnIndex,
-          sortAscending: _sortAscending,
-          sortArrowIcon: Icons.keyboard_arrow_up,
-          sortArrowAnimationDuration: const Duration(milliseconds: 0),
-          onSelectAll: (select) => select != null && select
-              // ? (getCurrentRouteOption(context) != selectAllPage
-              ? _dessertsDataSource!.selectAll()
-              //     : _dessertsDataSource!.selectAllOnThePage())
-              // : (getCurrentRouteOption(context) != selectAllPage
-              // ? _dessertsDataSource!.deselectAll()
-              : _dessertsDataSource!.deselectAllOnThePage(),
-          controller: _controller,
-          // hidePaginator: getCurrentRouteOption(context) == custPager,
-          columns: _columns,
-          empty: Center(
-              child: Container(
-                  padding: const EdgeInsets.all(20),
-                  // color: Colors.grey[200],
-                  child: const Text('No data'))),
-          loading: _Loading(),
-          errorBuilder: (e) => _ErrorAndRetry(
-              e.toString(), () => _dessertsDataSource!.refreshDatasource()),
-          source: _dessertsDataSource!),
-      // if (getCurrentRouteOption(context) == custPager)
-      //   Positioned(bottom: 16, child: CustomPager(_controller))
-    ]);
+              // if (getCurrentRouteOption(context) == custPager)
+              //   PageNumber(controller: _controller)
+            ]),
+        rowsPerPage: _rowsPerPage,
+        autoRowsToHeight: true,
+        pageSyncApproach: PageSyncApproach.goToFirst,
+        minWidth: 800,
+        fit: FlexFit.tight,
+        border: TableBorder(
+          borderRadius: BorderRadius.circular(10),
+          top: BorderSide(color: Colors.grey[300]!),
+          bottom: BorderSide(color: Colors.grey[300]!),
+          left: BorderSide(color: Colors.grey[300]!),
+          right: BorderSide(color: Colors.grey[300]!),
+          // verticalInside: BorderSide(color: Colors.grey[300]!),
+          // horizontalInside: const BorderSide(color: Colors.grey, width: 1),
+        ),
+        onRowsPerPageChanged: (value) {
+          print('Row per page changed to $value');
+          _rowsPerPage = value!;
+        },
+        initialFirstRowIndex: _initialRow,
+        onPageChanged: (rowIndex) {
+          //print(rowIndex / _rowsPerPage);
+        },
+        sortColumnIndex: _sortColumnIndex,
+        sortAscending: _sortAscending,
+        sortArrowIcon: Icons.keyboard_arrow_up,
+        sortArrowAnimationDuration: const Duration(milliseconds: 0),
+        onSelectAll: (select) => select != null && select
+        // ? (getCurrentRouteOption(context) != selectAllPage
+            ? _dessertsDataSource!.selectAll()
+        //     : _dessertsDataSource!.selectAllOnThePage())
+        // : (getCurrentRouteOption(context) != selectAllPage
+        // ? _dessertsDataSource!.deselectAll()
+            : _dessertsDataSource!.deselectAllOnThePage(),
+        controller: _controller,
+        // hidePaginator: getCurrentRouteOption(context) == custPager,
+        columns: _columns,
+        empty: Center(
+            child: Container(
+                padding: const EdgeInsets.all(20),
+                // color: Colors.grey[200],
+                child: const Text('No data'))),
+        loading: _Loading(),
+        errorBuilder: (e) => _ErrorAndRetry(
+            e.toString(), () => _dessertsDataSource!.refreshDatasource()),
+        source: _dessertsDataSource!);
   }
 }
 
@@ -443,6 +445,7 @@ class _TitledRangeSelectorState extends State<_TitledRangeSelector> {
 }
 
 int _idCounter = 0;
+
 class _ApprovalStore {
   _ApprovalStore(
     this.profilePic,
@@ -551,7 +554,7 @@ class _StoreListApprovalSourceAsync extends AsyncDataTableSource {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   buildCachedNetworkImage(store.profilePic, ph: 35, pw: 35),
-                  if (!Responsive.isDesktop())
+                  if (!Responsive.isDesktop(Get.context!))
                     GestureDetector(
                       onTap: () {
                         errorLog('Profile pic is id ${store.id}');
@@ -584,7 +587,7 @@ class _StoreListApprovalSourceAsync extends AsyncDataTableSource {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(store.ownerName),
-                  if (Responsive.isDesktop())
+                  if (Responsive.isDesktop(Get.context!))
                     GestureDetector(
                       onTap: () {
                         errorLog('Profile pic is id ${store.id}');
