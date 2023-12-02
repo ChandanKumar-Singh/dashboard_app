@@ -20,6 +20,7 @@ import '../../responsive.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../dashboard/settings_screen.dart';
 import 'components/side_menu.dart';
+import '../../../constants/side_menu_const.dart' as smc;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, this.tab});
@@ -65,8 +66,8 @@ class _MainScreenState extends State<MainScreen> {
                   // We want this side menu only for large screen
                   if (Responsive.isDesktop(context))
                     Container(
-                      constraints:
-                          const BoxConstraints(maxWidth: 300), // and it takes 1/6 part of the screen
+                      constraints: const BoxConstraints(
+                          maxWidth: 300), // and it takes 1/6 part of the screen
                       child: const SideMenu(),
                     ),
                   if (Responsive.isDesktop(context))
@@ -113,34 +114,51 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getScreen(MenuProvider menuProvider) {
     switch (menuProvider.sideMenu) {
-      case 'Dashboard':
-        return const StoreApprovalScreen();
-      case 'Transaction':
+      //navigation
+      case smc.dashboard:
         return const DashboardScreen();
-      case 'Task':
-        return const DashboardScreen();
-      case 'Documents':
-        return const DashboardScreen();
-      case 'Store':
-        return const DashboardScreen();
-      case 'Store List':
+
+      //settings
+      case smc.web_app_setting:
+        return const Web_AppSettingsScreen();
+
+      //team management
+
+      //customer management
+
+      //categories & products
+
+      //vendor
+      case smc.storeList:
         return const StoreListScreen();
-       case 'Store Earning/Payments':
+      case smc.storeEarning:
         return const StoreEarningPaymentsScreen();
-       case 'Store Approval':
+      case smc.storeApproval:
         return const StoreApprovalScreen();
-      case 'Send Notifications':
+
+      //orders
+
+      //delivery settings
+
+      //notifications
+      case smc.sendNotification:
         return const SendNotificationPage();
-      case 'List Notifications':
-        return const NotificationsListScreen();
+      case smc.listNotification:
+        return const ListNotificationsScreen();
+
+      //analytics
+
+      // reward management
+
+      //page management
+      case smc.aboutUs:
+        return const AboutUsPage();
+      case smc.terms_condition:
+        return const TermsAndConditionsPage();
+
+      //others
       case 'Profile':
         return const ProfileScreen();
-      case 'Web and App Settings':
-        return const SettingsScreen();
-      case 'About Us':
-        return const AboutUsPage();
-      case 'Terms And Conditions':
-        return const TermsAndConditionsPage();
       default:
         return const DashboardScreen();
     }

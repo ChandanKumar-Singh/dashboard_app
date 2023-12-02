@@ -15,25 +15,52 @@ import '../../responsive.dart';
 
 import 'components/profile/profile_header.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class Web_AppSettingsScreen extends StatefulWidget {
+  const Web_AppSettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<Web_AppSettingsScreen> createState() => _Web_AppSettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-  final authProvider = sl.get<AuthProvider>();
+class _Web_AppSettingsScreenState extends State<Web_AppSettingsScreen> {
+  final ScrollController sc = ScrollController();
 
-  void _onRefresh() async {
-    // authProvider.getUserInfo();
-    await Future.delayed(const Duration(seconds: 2));
-    _refreshController.refreshCompleted();
-    setState(() {});
+  List<GlobalKey> widgetKeys = [];
+  List<String> hashes = [
+    'FCM Server Setup',
+    'App Setup',
+    'Services',
+    'App Assets'
+  ];
+
+  @override
+  void initState() {
+    if (hashes.isNotEmpty) {
+      widgetKeys =
+          List<GlobalKey>.generate(hashes.length, (index) => GlobalKey());
+      setState(() {});
+    }
+    super.initState();
   }
 
+  void _scrollToWidget(GlobalKey key) {
+    sc.position.ensureVisible(
+      key.currentContext!.findRenderObject()!,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+
+    /* double offset = 0;
+    final box = _globalKey.currentContext?.findRenderObject() as RenderBox;
+    final boxHeight = box.size.height;
+    Offset boxPosition = box.localToGlobal(Offset.zero);
+    double boxY = (boxPosition.dy - boxHeight / 2);
+    sc.animateTo(
+      offset,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,51 +72,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(0),
             child: Column(
               children: [
-                const CommonHeader(),
-                const SizedBox(height: defaultPadding),
-                Expanded(
-                  child: SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: false,
-                    controller: _refreshController,
-                    header: const MaterialClassicHeader(),
-                    onRefresh: _onRefresh,
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                CommonHeader(
+                  secondaryWidget: (Responsive.isMobile(context))
+                      ? Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Expanded(
-                                flex: 5,
-                                child: Column(
-                                  children: [
-                                    _buildFCMSetup(context, theme),
-                                    const SizedBox(height: defaultPadding),
-                                    _buildAppSetup(context, theme),
-                                    const SizedBox(height: defaultPadding),
-                                    _buildAppService(context, theme),
-                                    if (Responsive.isMobile(context))
-                                      const SizedBox(height: defaultPadding),
-                                    if (Responsive.isMobile(context))
-                                      const _UpdateAppAssets(),
-                                  ],
-                                ),
-                              ),
-                              if (!Responsive.isMobile(context))
-                                const SizedBox(width: defaultPadding),
-                              // On Mobile means if the screen is less than 850 we dont want to show it
-                              if (!Responsive.isMobile(context))
-                                const Expanded(
-                                  flex: 2,
-                                  child: _UpdateAppAssets(),
-                                ),
+                              PopupMenuButton<int>(
+                                  offset: const Offset(0, 5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  position: PopupMenuPosition.under,
+                                  onSelected: (i) =>
+                                      _scrollToWidget(widgetKeys[i]),
+                                  itemBuilder: (ctx) => widgetKeys.map((e) {
+                                        var index = widgetKeys.indexOf(e);
+                                        return PopupMenuItem(
+                                          value: index,
+                                          child: bodyMedText(hashes[index]),
+                                        );
+                                      }).toList()),
                             ],
                           ),
-                        ],
+                        )
+                      : SizedBox.shrink(),
+                ),
+                const SizedBox(height: defaultPadding),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: SingleChildScrollView(
+                          controller: sc,
+                          padding: const EdgeInsets.all(defaultPadding),
+                          child: Column(
+                            children: [
+                              _buildFCMSetup(context, theme, widgetKeys[0]),
+                              const SizedBox(height: defaultPadding),
+                              _buildAppSetup(context, theme, widgetKeys[1]),
+                              const SizedBox(height: defaultPadding),
+                              _buildAppService(context, theme, widgetKeys[2]),
+                              const SizedBox(height: defaultPadding),
+                              _UpdateAppAssets(key: widgetKeys[3]),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      if (!Responsive.isMobile(context))
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ...widgetKeys.map((e) {
+                                  int index = widgetKeys.indexOf(e);
+                                  return InkWell(
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          _scrollToWidget(widgetKeys[index]),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: bodyMedText(hashes[index]),
+                                      ),
+                                    ),
+                                  );
+                                })
+                              ]),
+                        )
+                    ],
                   ),
                 )
               ],
@@ -100,8 +151,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildAppService(BuildContext context, ThemeData theme) {
+  Widget _buildAppService(BuildContext context, ThemeData theme,
+      GlobalKey<State<StatefulWidget>> key) {
     return defaultContainer(context,
+        key: key,
         padding: EdgeInsets.all(paddingDefault),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,8 +209,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ));
   }
 
-  Widget _buildAppSetup(BuildContext context, ThemeData theme) {
+  Widget _buildAppSetup(BuildContext context, ThemeData theme,
+      GlobalKey<State<StatefulWidget>> key) {
     return defaultContainer(context,
+        key: key,
         padding: EdgeInsets.all(paddingDefault),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,8 +267,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ));
   }
 
-  Widget _buildFCMSetup(BuildContext context, ThemeData theme) {
+  Widget _buildFCMSetup(BuildContext context, ThemeData theme,
+      GlobalKey<State<StatefulWidget>> key) {
     return defaultContainer(context,
+        key: key,
         padding: EdgeInsets.all(paddingDefault),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,6 +320,7 @@ class _UpdateAppAssets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: key,
       padding: const EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
@@ -333,7 +391,7 @@ class _UpdateAppAssets extends StatelessWidget {
                                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVzg59XB74ljlpidx5dQ29O9M8J2norxRHFA&usqp=CAU'),
                               fit: BoxFit.cover)),
                       constraints:
-                      BoxConstraints(maxHeight: 200, maxWidth: 500),
+                          BoxConstraints(maxHeight: 200, maxWidth: 500),
                     ),
                     Positioned(
                         bottom: 0,

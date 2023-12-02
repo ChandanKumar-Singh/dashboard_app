@@ -14,15 +14,15 @@ import '../../constants.dart';
 
 import 'components/profile/profile_header.dart';
 
-class NotificationsListScreen extends StatefulWidget {
-  const NotificationsListScreen({super.key});
+class ListNotificationsScreen extends StatefulWidget {
+  const ListNotificationsScreen({super.key});
 
   @override
-  State<NotificationsListScreen> createState() =>
-      _NotificationsListScreenState();
+  State<ListNotificationsScreen> createState() =>
+      _ListNotificationsScreenState();
 }
 
-class _NotificationsListScreenState extends State<NotificationsListScreen> {
+class _ListNotificationsScreenState extends State<ListNotificationsScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final authProvider = sl.get<AuthProvider>();
